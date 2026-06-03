@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { AuthService } from './auth.service';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-register',
@@ -79,6 +79,7 @@ import { AuthService } from './auth.service';
 export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   form: FormGroup = this.fb.nonNullable.group({
     firstName: ['', Validators.required],
@@ -94,7 +95,7 @@ export class RegisterComponent {
     this.loading = true;
     this.authService.register(this.form.value).subscribe({
       next: () => {
-        // TODO: navigate to dashboard
+        this.router.navigate(['/dashboard'], { replaceUrl: true });
       },
       error: () => {
         this.loading = false;

@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, Inject, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { AuthService } from './auth.service';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../auth.service';
+import { StorageService } from '../../../core/services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -43,7 +44,7 @@ import { AuthService } from './auth.service';
           {{ loading ? 'Signing in...' : 'Sign In' }}
         </button>
       </form>
-
+      @if (hasText()) { <p class="text-red-500 text-sm"> {{ message() }}</p> }
       <p class="mt-6 text-center text-sm text-zinc-400">
         Don't have an account?
         <a routerLink="/register" class="text-[#4edea3] font-semibold hover:underline">Register here</a>
@@ -54,12 +55,15 @@ import { AuthService } from './auth.service';
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   form: FormGroup = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
 
+  message = signal<string>('');
+  public hasText = computed(() => this.message().trim().length > 0);
   loading = false;
 
   onSubmit(): void {
@@ -67,11 +71,13 @@ export class LoginComponent {
     this.loading = true;
     this.authService.login(this.form.value).subscribe({
       next: (res) => {
-        localStorage.setItem('token', res.token);
-        // TODO: navigate to dashboard
+        this.message.set(res.message);
+        console.log('respuesta de login', res);
+        this.router.navigate(['/dashboard'], { replaceUrl: true });
       },
-      error: () => {
+      error: (err) => {
         this.loading = false;
+        console.log(err);
       },
     });
   }

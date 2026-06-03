@@ -7,11 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinLad.Api.Services;
 
-public class UserService(AppDbContext context, TokenService tokenService, IPasswordHasher<User> passwordHasher)
+public class UserService(AppDbContext context, TokenService tokenService)
 {
     private readonly AppDbContext _context = context;
     private readonly TokenService _tokenService = tokenService;
-    private readonly IPasswordHasher<User> _passwordHasher = passwordHasher;
 
     public async Task<string> RegisterAsync(RegisterDto userRegister)
     {
@@ -51,9 +50,8 @@ public class UserService(AppDbContext context, TokenService tokenService, IPassw
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userLogin.Email);
         if (user == null)
             return new AuthResponseDto("User not found", false);
-        
-        var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, userLogin.Password);
-        if (result != PasswordVerificationResult.Success)
+
+        if (!BCrypt.Net.BCrypt.Verify(userLogin.Password, user.PasswordHash))
             return new AuthResponseDto("Incorrect user credentials", false);
 
         var token = _tokenService.GenerateToken(user);
@@ -62,7 +60,7 @@ public class UserService(AppDbContext context, TokenService tokenService, IPassw
             Message: "Login successful",
             Success: true,
             Token: token,
-            Name: user.FirstName + user.LastName
+            Name: $"{user.FirstName}  {user.LastName}"
         );
     }
 }
