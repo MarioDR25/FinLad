@@ -11,5 +11,3 @@ public class User : BaseEntity
     public ICollection<Transaction> Transactions { get; set; } = [];
 
 }
-
-
