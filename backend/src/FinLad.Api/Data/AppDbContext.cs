@@ -8,6 +8,9 @@ public class AppDbContext: DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<Wallet> Wallets => Set<Wallet>();
+    public DbSet<Transaction> Transactions => Set<Transaction>();
+    public DbSet<Category> Categories => Set<Category>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,6 +38,12 @@ public class AppDbContext: DbContext
             .HasOne(t => t.Wallet)
             .WithMany(w => w.Transactions)
             .HasForeignKey(t => t.WalletId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Transaction>()
+            .HasOne(t => t.Category)
+            .WithMany(c => c.Transactions)
+            .HasForeignKey(t => t.CategoryId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

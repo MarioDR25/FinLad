@@ -6,16 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinLad.Api.Services;
 
-public class UserService(AppDbContext context, TokenService tokenService)
+public class UserService(AppDbContext context, WalletService walletService, TokenService tokenService)
 {
     private readonly AppDbContext _context = context;
+    private readonly WalletService _walletService = walletService;
     private readonly TokenService _tokenService = tokenService;
 
-    public async Task<string> RegisterAsync(RegisterDto userRegister)
+    public async Task<AuthResponseDto> RegisterAsync(RegisterDto userRegister)
     {
         bool emailExists = await _context.Users.AnyAsync(u => u.Email == userRegister.Email);
 
-        if (emailExists) return "This email address is already registered.";
+        if (emailExists) return new AuthResponseDto("This email address is already registered.", false);
 
         using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -31,7 +32,7 @@ public class UserService(AppDbContext context, TokenService tokenService)
                 Email = userRegister.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(userRegister.Password),
                 CreatedAt = DateTime.UtcNow,
-                Wallets = CreateDefaultWallets(userId)
+                Wallets = _walletService.CreateDefaultWallets(userId)
 
             };
 
@@ -41,13 +42,18 @@ public class UserService(AppDbContext context, TokenService tokenService)
 
             var token = _tokenService.GenerateToken(user);
 
-
-            return $"User {userRegister.FirstName} has been registered successfully";
+            return new AuthResponseDto(
+                Message: "has been registered successfully",
+                Success: true,
+                Token: token,
+                Name: $"{user.FirstName}  {user.LastName}"
+            );
         }
+            
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
-            return $"Error: {ex.Message}";
+            return new AuthResponseDto($"Error:{ex.Message}", false);
         }
     }
 
@@ -69,18 +75,6 @@ public class UserService(AppDbContext context, TokenService tokenService)
             Token: token,
             Name: $"{user.FirstName}  {user.LastName}"
         );
-    }
-
-
-    public static ICollection<Wallet> CreateDefaultWallets(Guid userId)
-    {
-        return
-        [
-            new() { Name = "Bank Account", Type = WalletType.BankAccount, Balance = 0, UserId = userId },
-                new() { Name = "Credit Card", Type = WalletType.CreditCard, Balance = 0, UserId = userId },
-                new() { Name = "Cash", Type = WalletType.Cash, Balance = 0, UserId = userId },
-                new() { Name = "Digital Wallet", Type = WalletType.DigitalWallet, Balance = 0, UserId = userId }
-        ];
     }
 }
 

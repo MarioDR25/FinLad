@@ -12,10 +12,12 @@ public class AuthController(UserService userService) : ControllerBase
 {
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<AuthResponseDto>> Register(RegisterDto registerDto)
     {
         var result = await userService.RegisterAsync(registerDto);
+        if (!result.Success)
+            return Conflict(result);
         return Ok(result);
     }
 

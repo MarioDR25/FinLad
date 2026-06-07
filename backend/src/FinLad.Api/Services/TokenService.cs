@@ -33,6 +33,5 @@ public class TokenService(IConfiguration configuration)
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
 }
-
-
