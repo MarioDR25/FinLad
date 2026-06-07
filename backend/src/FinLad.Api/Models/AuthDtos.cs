@@ -16,7 +16,7 @@ public record RegisterDto(
 
         [Required(ErrorMessage = "Password is required.")]
         [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters long.")]
-        string PasswordHash
+        string Password
 );
 
 public record LoginDto(
