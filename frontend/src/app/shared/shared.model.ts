@@ -1,10 +1,11 @@
 export interface WalletData {
-  icon: string;
+  id: string;
+  name: string;
   tag: string;
-  label: string;
-  balance: string;
+  icon: string;
+  description: string;
+  balance: number;
 }
-
 
 export interface Transaction {
   id: number;

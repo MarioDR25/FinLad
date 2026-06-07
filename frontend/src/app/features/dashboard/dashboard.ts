@@ -1,16 +1,36 @@
-import { Component, inject } from '@angular/core';
-import { TransactionTable } from "./components/transaction-table";
-import { DashboardService } from './services/dashboard-service';
-import { WalletCard } from "./components/wallet-card";
-import { LineChart } from "./components/line-chart";
-import { DoughnutChart } from "./components/doughnut-chart";
-import { AiInput } from "./components/ai-input";
-import { Chart, LineController, LineElement, PointElement, LinearScale, CategoryScale, DoughnutController, ArcElement, Legend, Tooltip, Filler,
+import { Component, computed, inject } from '@angular/core';
+import { TransactionTable } from './components/transaction-table';
+import { DashboardService } from './services/dashboard.service';
+import { WalletCard } from './components/wallet-card';
+import { LineChart } from './components/line-chart';
+import { DoughnutChart } from './components/doughnut-chart';
+import { AiInput } from './components/ai-input';
+import {
+  Chart,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  DoughnutController,
+  ArcElement,
+  Legend,
+  Tooltip,
+  Filler,
 } from 'chart.js';
 
-
-Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale, DoughnutController, ArcElement, Legend, Tooltip, Filler);
-
+Chart.register(
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  DoughnutController,
+  ArcElement,
+  Legend,
+  Tooltip,
+  Filler,
+);
 
 @Component({
   selector: 'app-home',
@@ -21,19 +41,19 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryS
         Total Balance
       </h2>
       <div class="flex items-baseline gap-3">
-        <span class="text-5xl font-bold text-[#dde4dd]">3,700.00</span>
+        <span class="text-5xl font-bold text-[#dde4dd]">{{totalBalance()}}</span>
         <span class="text-2xl font-semibold text-[#4edea3]/80">PLN</span>
       </div>
     </section>
 
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      @for (w of dashboardService.wallets; track w.label) {
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      @for (w of walletsList(); track w.id) {
         <app-wallet-card [data]="w" />
       }
     </section>
 
     <app-ai-input />
-    <app-line-chart [data]="dashboardService.dataLine"/>
+    <app-line-chart [data]="dashboardService.dataLine" />
 
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 w-full">
       <app-doughnut-chart />
@@ -43,4 +63,11 @@ Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryS
 })
 export class Dashboard {
   dashboardService = inject(DashboardService);
+  walletsList = this.dashboardService.wallets;
+  
+  totalBalance = computed(() =>  this.walletsList().reduce((acc, wallet) => acc + wallet.balance, 0));
+
+  ngOnInit() {
+    this.dashboardService.getWallets(); 
+  }
 }
