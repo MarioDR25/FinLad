@@ -1,9 +1,9 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { RegisterDto, LoginDto, AuthResponseDto } from './auth.model';
-import { environment } from '../../../environments/environment';
-import { StorageService } from '../../core/services/storage.service';
+import { RegisterDto, LoginDto, AuthResponseDto } from '../auth.model';
+import { environment } from '../../../../environments/environment';
+import { StorageService } from '../../../core/services/storage.service';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
@@ -39,6 +39,6 @@ export class AuthService {
     this.storage.remove('token');
     this.storage.remove('name');
     this._token.set(null);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 } 

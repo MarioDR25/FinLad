@@ -1,8 +1,8 @@
-import { Component, computed, Inject, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../auth.service';
-import { StorageService } from '../../../core/services/storage.service';
+import { AuthService } from '../services/auth.service';
+
 
 @Component({
   selector: 'app-login',
@@ -45,10 +45,12 @@ import { StorageService } from '../../../core/services/storage.service';
         </button>
       </form>
       @if (hasText()) { <p class="text-red-500 text-sm"> {{ message() }}</p> }
+
       <p class="mt-6 text-center text-sm text-zinc-400">
         Don't have an account?
-        <a routerLink="/register" class="text-[#4edea3] font-semibold hover:underline">Register here</a>
+        <a routerLink="/auth/register" (click)="debugClick()"  class="text-[#4edea3] font-semibold hover:underline">Register here</a>
       </p>
+
     </div>
   </div>`,
 })
@@ -62,6 +64,10 @@ export class LoginComponent {
     password: ['', Validators.required],
   });
 
+  debugClick() {
+  console.log('clicked');
+}
+
   message = signal<string>('');
   public hasText = computed(() => this.message().trim().length > 0);
   loading = false;
@@ -71,11 +77,11 @@ export class LoginComponent {
     this.loading = true;
     this.authService.login(this.form.value).subscribe({
       next: (res) => {
-        this.message.set(res.message);
         console.log('respuesta de login', res);
         this.router.navigate(['/dashboard'], { replaceUrl: true });
       },
       error: (err) => {
+        this.message.set(err.error.message);
         this.loading = false;
         console.log(err);
       },

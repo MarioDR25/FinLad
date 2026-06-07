@@ -1,7 +1,7 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -68,8 +68,9 @@ import { AuthService } from '../auth.service';
 
       <p class="mt-6 text-center text-sm text-zinc-400">
         Already have an account?
-        <a routerLink="/login" class="text-[#4edea3] font-semibold hover:underline">Login here</a>
+        <a routerLink="/auth/login" class="text-[#4edea3] font-semibold hover:underline">Login here</a>
       </p>
+
     </div>
   </div> `,
 })
