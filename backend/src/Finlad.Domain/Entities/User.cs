@@ -6,6 +6,10 @@ public class User : BaseEntity
     public string? LastName { get; set; }
     public required string Email { get; set; }
     public required string PasswordHash {get; set; } = string.Empty; 
+
+    public ICollection<Wallet> Wallets { get; set; } = [];
+    public ICollection<Transaction> Transactions { get; set; } = [];
+
 }
 
 
