@@ -19,7 +19,6 @@ public class WalletsController(WalletService walletService) : ControllerBase
         
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var wallets = await _walletService.GetAllWalletsAsync(userId);
-    
         return Ok(wallets);
     }
 }
