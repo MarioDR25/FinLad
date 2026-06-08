@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Transaction, WalletData } from '../../../shared/shared.model';
+import { Transaction, TransactionResponse, WalletData } from '../../../shared/shared.model';
 import { ChartData  } from 'chart.js';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
@@ -12,7 +12,7 @@ export class DashboardService {
 
    wallets = signal<WalletData[]>([]);
 
-  transactions: Transaction[] = [
+  transactions: TransactionResponse[] = [
     { id: 1, icon: '🍽️', description: 'Green Garden Bistro', category: 'Food', wallet: 'Bank', amount: -45.00 },
     { id: 2, icon: '💼', description: 'Salary Deposit', category: 'Income', wallet: 'Bank', amount: 3000.00 },
     { id: 3, icon: '🚗', description: 'Uber Ride', category: 'Transport', wallet: 'Cash', amount: -28.50 },
@@ -34,9 +34,11 @@ export class DashboardService {
   } 
 
 
-  /* createTransaction(){
-    this.http.post<string>(``)
-  } */
+  createTransaction(input: string): Observable<Transaction> {
+    return this.http.post<Transaction>(`${environment.apiUrl}/Transaction/ai`, { dataInput: input }).pipe(
+      tap((a) => console.log(a, '<- :debo llegar aqui'))
+    )
+  } 
 
 
 

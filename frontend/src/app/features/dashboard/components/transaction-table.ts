@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { Transaction } from '../../../shared/shared.model';
+import { Transaction, TransactionResponse } from '../../../shared/shared.model';
 
 
 
@@ -25,7 +25,7 @@ import { Transaction } from '../../../shared/shared.model';
           <tbody class="divide-y divide-[#3c4a42]/30">
             @for (tx of data(); track tx.id) {
               <tr class="hover:bg-[#2f3632]/20 transition-colors">
-                <td class="py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-[#242c27] flex items-center justify-center text-[#4edea3] text-base">{{ tx.icon }}</div><span class="text-base text-[#dde4dd]">{{ tx.description }}</span></div></td>
+                <td class="py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded bg-[#242c27] flex items-center justify-center text-[#4edea3] text-base"> icon </div><span class="text-base text-[#dde4dd]">{{ tx.description }}</span></div></td>
                 <td class="py-4"><span class="px-2 py-1 bg-[#2f3632] text-[10px] rounded uppercase font-bold text-[#bbcabf]">{{ tx.category }}</span></td>
                 <td class="py-4 text-sm text-[#bbcabf]">{{ tx.wallet }}</td>
                 <td class="py-4 text-right font-mono" [class.text-[#ffb4ab]]="tx.amount < 0" [class.text-[#4edea3]]="tx.amount > 0">{{ tx.amount > 0 ? '+' : '' }}{{ tx.amount.toFixed(2) }}</td>
@@ -38,5 +38,5 @@ import { Transaction } from '../../../shared/shared.model';
   `,
 })
 export class TransactionTable {
-  data = input.required<Transaction[]>();
+  data = input.required<TransactionResponse[]>();
 }
