@@ -1,7 +1,8 @@
 using System.Security.Claims;
 using Finlad.Domain.Entities;
+using FinLad.Api.configurations;
 using FinLad.Api.Services;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace UnitTests;
 
@@ -10,18 +11,15 @@ public class TokenServiceTests
     [Fact]
     public void GenerateToken_ReturnsValidJwtWithCorrectClaims()
     {
-        // Arrange: crea un IConfiguration falso con valores de prueba
-        var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                { "Jwt:Key", "this-is-a-secret-key-for-testing-puroposes!" },
-                { "Jwt:Issuer", "TestIssuer" },
-                { "Jwt:Audience", "TestAudience" },
-                { "Jwt:DurationInMinutes", "60" }
-            })
-            .Build();
-
-        var service = new TokenService(config);
+        var jwtSettings = new JwtSettings
+        {
+            Key = "this-is-a-secret-key-for-testing-puroposes!",
+            Issuer = "TestIssuer",
+            Audience = "TestAudience",
+            DurationInMinutes = 60
+        };
+        var options = Options.Create(jwtSettings);
+        var service = new TokenService(options);
 
         var user = new User
         {
