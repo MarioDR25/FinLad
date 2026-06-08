@@ -1,6 +1,6 @@
 namespace FinLad.Api.Models;
 
-public record AiTransactionRequest(string UserInput);
+public record AiTransactionRequest(string DataInput);
 
 public record ParsedTransaction(
     decimal Amount,
@@ -9,8 +9,25 @@ public record ParsedTransaction(
     string Wallet,
     string Description,
     DateTime? Date,
-    string? Error
+    string? Error,
+    string? ToWallet = null
 )
 {
-    public bool IsValid => Error == null;
+    public bool IsValid => string.IsNullOrWhiteSpace(Error)
+        && Amount > 0
+        && !string.IsNullOrWhiteSpace(Type)
+        && !string.IsNullOrWhiteSpace(Category)
+        && !string.IsNullOrWhiteSpace(Wallet)
+        && !string.IsNullOrWhiteSpace(Description)
+        && (Type != "Transfer" || !string.IsNullOrWhiteSpace(ToWallet));
 }
+
+public record TransactionDto(
+    Guid Id,
+    decimal Amount,
+    string Type,
+    string Category,
+    string Wallet,
+    string Description,
+    DateTime Date
+);

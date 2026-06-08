@@ -26,8 +26,11 @@ public class TransactionService(AppDbContext context)
             .ToArrayAsync();
     }
 
-    public async Task<Transaction> CreateFromParsedAsync(ParsedTransaction parsed, Guid userId)
+    public async Task<TransactionDto> CreateFromParsedAsync(ParsedTransaction parsed, Guid userId)
     {
+        if (string.IsNullOrWhiteSpace(parsed.Category))
+            throw new InvalidOperationException("AI returned an empty category");
+
         var category = await _context.Categories
             .FirstOrDefaultAsync(c => c.Name == parsed.Category);
 
@@ -46,7 +49,8 @@ public class TransactionService(AppDbContext context)
         {
             "Income" => TransactionType.Income,
             "Expense" => TransactionType.Expense,
-            _ => TransactionType.Transfer
+            "Transfer" => TransactionType.Transfer,
+            _ => throw new InvalidOperationException($"Unknown transaction type: {parsed.Type}")
         };
 
         var transaction = new Transaction
@@ -54,7 +58,9 @@ public class TransactionService(AppDbContext context)
             Amount = parsed.Amount,
             Type = type,
             Description = parsed.Description,
-            Date = parsed.Date ?? DateTime.UtcNow,
+            Date = parsed.Date.HasValue
+                ? DateTime.SpecifyKind(parsed.Date.Value, DateTimeKind.Utc)
+                : DateTime.UtcNow,
             CategoryId = category.Id,
             WalletId = wallet.Id,
             UserId = userId
@@ -64,10 +70,27 @@ public class TransactionService(AppDbContext context)
             wallet.Balance += parsed.Amount;
         else if (type == TransactionType.Expense)
             wallet.Balance -= parsed.Amount;
+        else if (type == TransactionType.Transfer)
+        {
+            var toWallet = await _context.Wallets
+                .FirstOrDefaultAsync(w => w.UserId == userId && w.Name == parsed.ToWallet)
+                ?? throw new InvalidOperationException($"Destination wallet not found: {parsed.ToWallet}");
+
+            wallet.Balance -= parsed.Amount;
+            toWallet.Balance += parsed.Amount;
+        }
 
         _context.Transactions.Add(transaction);
         await _context.SaveChangesAsync();
 
-        return transaction;
+        return new TransactionDto(
+            transaction.Id,
+            transaction.Amount,
+            transaction.Type.ToString(),
+            category.Name,
+            wallet.Name,
+            transaction.Description,
+            transaction.Date
+        );
     }
 }

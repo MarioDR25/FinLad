@@ -18,13 +18,13 @@ public class TransactionController(AiService aiService, TransactionService trans
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-        var parsed = await aiService.ParseTransactionAsync(request.UserInput);
+        var parsed = await aiService.ParseTransactionAsync(request.DataInput);
 
         if (!parsed.IsValid)
-            return BadRequest(new { error = parsed.Error });
+            return BadRequest(new { error = parsed.Error ?? "Could not understand the transaction. Try being more specific." });
 
-        var transaction = await transactionService.CreateFromParsedAsync(parsed, userId);
+        var dto = await transactionService.CreateFromParsedAsync(parsed, userId);
 
-        return Ok(transaction);
+        return Ok(dto);
     }
 }

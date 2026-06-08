@@ -10,7 +10,7 @@ namespace FinLad.Api.Services;
 
 public class AiService(HttpClient http, IOptions<AiSettings> aiOptions)
 {
-   
+
     private readonly AiSettings _aiSettings = aiOptions.Value;
     public async Task<ParsedTransaction> ParseTransactionAsync(string userInput)
     {
@@ -39,7 +39,11 @@ public class AiService(HttpClient http, IOptions<AiSettings> aiOptions)
         var result = await response.Content.ReadFromJsonAsync<JsonElement>();
         var content = result.GetProperty("choices")[0].GetProperty("message").GetProperty("content").GetString();
 
-        return JsonSerializer.Deserialize<ParsedTransaction>(content!)!;
+        Console.WriteLine("=== DEEPSEEK RAW RESPONSE ===");
+        Console.WriteLine(content);
+
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        return JsonSerializer.Deserialize<ParsedTransaction>(content!, options)!;
     }
 
     private static string BuildPrompt(string userInput)
@@ -47,23 +51,26 @@ public class AiService(HttpClient http, IOptions<AiSettings> aiOptions)
         var categories = Enum.GetNames<CategoryType>();
         var types = Enum.GetNames<TransactionType>();
         var wallets = Enum.GetNames<WalletType>();
-        var errorExample = """{"amount":0,"type":"","category":"","wallet":"","description":"","date":null,"error":"reason"}""";
+        var errorExample = """{"amount":0,"type":"","category":"","wallet":"","description":"","date":null,"error":"reason","toWallet":null}""";
 
         return $"""
-            Parse this financial message into a transaction. Return ONLY a JSON object.
+            You are a financial transaction parser. Analyze this message and return ONLY a JSON object.
+            Pick the best matching value from each list below based on the user's message.
 
-            Available categories: [{string.Join(", ", categories)}]
-            Available wallets: [{string.Join(", ", wallets)}]
+            Types: [{string.Join(", ", types)}]
+            Categories: [{string.Join(", ", categories)}]
+            Wallets: [{string.Join(", ", wallets)}]
 
             Rules:
-            - "Type" must be one of: [{string.Join(", ", types)}]
-            - "Category" must match one of the available categories exactly, or use the closest match
-            - "Wallet" must match one of the available wallets exactly, or use the closest match
-            - "Amount" is always a positive number
-            - "Description" is a short summary
-            - "Date" is optional, use yyyy-MM-dd if mentioned, otherwise null
+            - "type" must be one of the types above. Use Transfer when moving money between wallets (keywords: "transferí", "consigné", "deposité", "retiré", "saqué", "moví", "pasé"). Use Income for receiving money, Expense for spending money
+            - "category" must be one of the categories above, pick the closest match
+            - "wallet" must be one of the wallets above. For Transfer, this is the SOURCE wallet (where money comes FROM). Use CreditCard for "tarjeta"/"card", BankAccount for "banco"/"cuenta"/"bank", Cash for "efectivo"/"cash", DigitalWallet for "digital"/"app"
+            - "toWallet" must be one of the wallets above. Only required for Transfer, this is where money goes TO. Use Cash for "retiré"/"withdraw" if no destination, BankAccount for "deposité"/"consigné" if no destination. Use null for Income/Expense
+            - "amount" is always a positive number
+            - "description" is a short summary of what happened
+            - "date" (yyyy-MM-dd). Use today's date if the message says "today"/"hoy", yesterday if "ayer"/"yesterday", or the date mentioned. If no date at all, set to null
 
-            If the message does NOT describe a financial transaction, is gibberish, empty, or missing critical information (amount, type), return:
+            If the message is not a financial transaction, return:
             {errorExample}
 
             User message: "{userInput}"

@@ -14,10 +14,10 @@ public class WalletService(AppDbContext context)
     {
         return
         [
-            new(){ Name = "Bank Account", Type = WalletType.BankAccount, Balance = 0.00m, UserId = userId, Description = "Main bank account", Icon = "fa-building-columns",  Tag = "MAIN" },
-            new(){ Name = "Credit Card", Type = WalletType.CreditCard, Balance = 0.00m, UserId = userId, Description = "Credit card tracking", Icon = "fa-credit-card", Tag = "CREDIT"},
-            new(){ Name = "Cash", Type = WalletType.Cash, Balance = 0.00m, UserId = userId, Description = "Physical cash", Icon = "fa-coins",  Tag = "DAILY" },
-            new(){ Name = "Digital Wallet", Type = WalletType.DigitalWallet, Balance = 0.00m, UserId = userId, Description = "Digital platforms", Icon = "fa-mobile-screen", Tag = "DIGITAL"}
+            new(){ Name = WalletType.BankAccount.ToString(), Type = WalletType.BankAccount, Balance = 0.00m, UserId = userId, Description = "Main bank account", Icon = "fa-building-columns",  Tag = "MAIN" },
+            new(){ Name = WalletType.CreditCard.ToString(), Type = WalletType.CreditCard, Balance = 0.00m, UserId = userId, Description = "Credit card tracking", Icon = "fa-credit-card", Tag = "CREDIT"},
+            new(){ Name = WalletType.Cash.ToString(), Type = WalletType.Cash, Balance = 0.00m, UserId = userId, Description = "Physical cash", Icon = "fa-coins",  Tag = "DAILY" },
+            new(){ Name = WalletType.DigitalWallet.ToString(), Type = WalletType.DigitalWallet, Balance = 0.00m, UserId = userId, Description = "Digital platforms", Icon = "fa-mobile-screen", Tag = "DIGITAL"}
         ];
     }
 
