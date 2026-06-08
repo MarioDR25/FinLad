@@ -29,14 +29,20 @@ export class DashboardService {
   }; 
 
    
-  getWallets(){
-     this.http.get<WalletData[]>(`${environment.apiUrl}/Wallets`).subscribe(
-      {
-        next:(res) => this.wallets.set(res),
-        error: (err) => console.error('Failed to load wallets', err) 
-      }
-    )
+  loadWallets (): Observable<WalletData[]> { 
+    return this.http.get<WalletData[]>(`${environment.apiUrl}/Wallets`) 
   } 
+
+
+  /* createTransaction(){
+    this.http.post<string>(``)
+  } */
+
+
+
+
+
+
 }
 
 

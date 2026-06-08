@@ -4,6 +4,7 @@ import { MobileNav } from './mobile-nav';
 import { RouterOutlet } from "@angular/router";
 
 
+
 @Component({
   selector: 'app-main-layout',
   standalone: true,
@@ -16,4 +17,6 @@ import { RouterOutlet } from "@angular/router";
     <app-mobile-nav />
   `,
 })
-export class MainLayout {}
+export class MainLayout {
+  
+}

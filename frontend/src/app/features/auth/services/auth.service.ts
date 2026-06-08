@@ -37,7 +37,7 @@ export class AuthService {
 
   logout(): void {
     this.storage.remove('token');
-    this.storage.remove('name');
+    this.storage.remove('user');
     this._token.set(null);
     this.router.navigate(['/auth/login']);
   }

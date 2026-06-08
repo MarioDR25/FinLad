@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -44,13 +43,19 @@ import { AuthService } from '../services/auth.service';
           {{ loading ? 'Signing in...' : 'Sign In' }}
         </button>
       </form>
-      @if (hasText()) { <p class="text-red-500 text-sm"> {{ message() }}</p> }
+      @if (hasText()) {
+        <p class="text-red-500 text-sm">{{ message() }}</p>
+      }
 
       <p class="mt-6 text-center text-sm text-zinc-400">
         Don't have an account?
-        <a routerLink="/auth/register" (click)="debugClick()"  class="text-[#4edea3] font-semibold hover:underline">Register here</a>
+        <a
+          routerLink="/auth/register"
+          (click)="debugClick()"
+          class="text-[#4edea3] font-semibold hover:underline"
+          >Register here</a
+        >
       </p>
-
     </div>
   </div>`,
 })
@@ -58,22 +63,26 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
-
+  
+  message = signal<string>('');
+  hasText = computed(() => this.message().trim().length > 0);
+  loading = false;
+ 
   form: FormGroup = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
 
   debugClick() {
-  console.log('clicked');
-}
-
-  message = signal<string>('');
-  public hasText = computed(() => this.message().trim().length > 0);
-  loading = false;
+    console.log('clicked');
+  }
 
   onSubmit(): void {
-    if (this.form.invalid) return;
+    console.log('form valid:', this.form.valid, 'form value:', this.form.value);
+    if (this.form.invalid) {
+      this.message.set('Please enter a valid email and password.');
+      return;
+    }
     this.loading = true;
     this.authService.login(this.form.value).subscribe({
       next: (res) => {
@@ -81,9 +90,10 @@ export class LoginComponent {
         this.router.navigate(['/dashboard'], { replaceUrl: true });
       },
       error: (err) => {
-        this.message.set(err.error.message);
+        console.log('error completo:', err);
+        console.log('error body:', err.error);
+        this.message.set(err.error?.message || 'Error desconocido');
         this.loading = false;
-        console.log(err);
       },
     });
   }

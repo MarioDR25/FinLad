@@ -1,4 +1,6 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { StorageService } from '../core/services/storage.service';
+import { AuthService } from '../features/auth/services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -24,15 +26,26 @@ import { Component, input } from '@angular/core';
       <div class="px-6 py-4 mt-auto">
         <div class="flex items-center gap-3 p-2 rounded-lg bg-[#2f3632]/30">
           <div class="w-8 h-8 rounded-full bg-[#4edea3]/20 border border-[#3c4a42] flex items-center justify-center text-sm font-bold text-[#4edea3]">M</div>
-          <div class="overflow-hidden">
-            <p class="text-sm font-medium text-[#dde4dd] truncate">{{ name() }}</p>
-            <p class="text-[10px] text-[#bbcabf] truncate">Premium Member</p>
+          <div class="overflow-hidden mr-4">
+            <p class="text-sm font-medium text-[#dde4dd] truncate">{{ userName }}</p>
+            <p class="text-[10px] text-[#bbcabf] truncate">Member</p>
           </div>
+          <button  (click)="onLogout()"  type="button" aria-label="Log out">
+            <i class="fa-solid fa-arrow-right-from-bracket text-[#dde4dd] text-xl cursor-pointer"></i>
+          </button>
+          
         </div>
       </div>
     </aside>
   `,
 })
 export class Sidebar {
-  name = input('Mario');
+  private storageService = inject(StorageService);
+  private authService = inject(AuthService);
+
+  userName = this.storageService.get('user')
+  
+  onLogout(){
+    this.authService.logout();
+  }
 }

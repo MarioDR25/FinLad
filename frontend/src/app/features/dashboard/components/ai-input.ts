@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { DashboardService } from '../services/dashboard.service';
 
 @Component({
   selector: 'app-ai-input',
@@ -15,4 +16,8 @@ import { Component } from '@angular/core';
     </section>
   `,
 })
-export class AiInput {}
+export class AiInput {
+  private dashboardService = inject(DashboardService);
+
+  
+}

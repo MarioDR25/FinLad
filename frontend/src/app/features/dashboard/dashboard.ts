@@ -47,8 +47,8 @@ Chart.register(
     </section>
 
     <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
-      @for (w of walletsList(); track w.id) {
-        <app-wallet-card [data]="w" />
+      @for (wallet of walletsList(); track wallet.id) {
+        <app-wallet-card [data]="wallet" />
       }
     </section>
 
@@ -68,6 +68,11 @@ export class Dashboard {
   totalBalance = computed(() =>  this.walletsList().reduce((acc, wallet) => acc + wallet.balance, 0));
 
   ngOnInit() {
-    this.dashboardService.getWallets(); 
+    this.dashboardService.loadWallets().subscribe(
+      {
+        next:(res) => this.dashboardService.wallets.set(res),
+        error: (err) => console.error('Failed to load wallets', err) 
+      }
+    ); 
   }
 }
