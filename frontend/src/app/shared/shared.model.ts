@@ -6,14 +6,6 @@ export interface WalletData {
   description: string;
   balance: number;
 }
-export interface TransactionResponse {
-  id: number;
-  icon: string;
-  description: string;
-  category: string;
-  wallet: string;
-  amount: number;
-}
 
 
 export interface Transaction {
@@ -24,4 +16,10 @@ export interface Transaction {
   wallet: string;
   description: string;
   date: string;
+}
+
+export interface ExpensesCategory {
+  category:   string;
+  total:      number;
+  percentage: number;
 }

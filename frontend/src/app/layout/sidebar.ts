@@ -8,12 +8,12 @@ import { AuthService } from '../features/auth/services/auth.service';
   template: `
     <aside class="hidden md:flex flex-col h-screen sticky top-0 py-8 bg-[#161d19] border-r border-[#3c4a42] w-64">
       <div class="px-6 mb-10 flex items-center gap-3">
-        <div class="w-8 h-8 bg-[#4edea3] rounded flex items-center justify-center">
-          <span class="text-[#003824] font-bold text-lg">₣</span>
-        </div>
+     
+          <i class="fa-solid fa-hand-holding-dollar  text-[#31a575] text-3xl"></i>
+        
         <div>
-          <h1 class="text-xl font-bold text-[#4edea3]">FinLad</h1>
-          <p class="text-[10px] uppercase tracking-widest text-[#bbcabf]/60">Wealth Management</p>
+          <h1 class="text-2xl font-bold text-[#31a575]">FinŁad</h1>
+          <p class="text-[10px] uppercase tracking-widest text-[#bbcabf]/60">Smart Finance</p>
         </div>
       </div>
       <nav class="flex-1 space-y-1">

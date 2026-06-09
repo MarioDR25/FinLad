@@ -36,7 +36,7 @@ Chart.register(
   selector: 'app-home',
   imports: [TransactionTable, WalletCard, LineChart, DoughnutChart, AiInput],
   template: ` <main class="flex-1 max-w-360 mx-auto w-full px-6 md:px-10 py-8 flex flex-col gap-10">
-    <section class="mt-8">
+    <section class="mt-2">
       <h2 class="text-xs font-medium text-[#bbcabf] uppercase tracking-widest mb-2 opacity-70">
         Total Balance
       </h2>
@@ -53,26 +53,57 @@ Chart.register(
     </section>
 
     <app-ai-input />
+    
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 ">
+      <app-doughnut-chart class="lg:col-span-5" [data]="expensesCategory()"/>
+      <app-transaction-table class="lg:col-span-7" [data]="transactionsList()" />
+    </section>
+    
     <app-line-chart [data]="dashboardService.dataLine" />
 
-    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 w-full">
-      <app-doughnut-chart />
-      <app-transaction-table [data]="dashboardService.transactions" />
-    </section>
   </main>`,
 })
 export class Dashboard {
   dashboardService = inject(DashboardService);
   walletsList = this.dashboardService.wallets;
+  transactionsList = this.dashboardService.transactions;
+  expensesCategory = this.dashboardService.expensesCategory;
   
   totalBalance = computed(() =>  this.walletsList().reduce((acc, wallet) => acc + wallet.balance, 0));
 
   ngOnInit() {
+     this.onLoadWallets();
+     this.onLoadTransactions();
+     this.onloadExpensesByCategory();
+  }
+
+
+  onLoadWallets(){
     this.dashboardService.loadWallets().subscribe(
       {
         next:(res) => this.dashboardService.wallets.set(res),
         error: (err) => console.error('Failed to load wallets', err) 
       }
-    ); 
+    );
+  }
+
+  onloadExpensesByCategory(){
+    this.dashboardService.loadExpensesByCategory().subscribe(
+      {
+        next:(res) => this.dashboardService.expensesCategory.set(res),
+        error: (err) => console.error('Failed to load Expenses', err) 
+      }
+    );
+  }
+
+
+
+  onLoadTransactions(){
+    this.dashboardService.loadTransactions().subscribe(
+      {
+        next:(res) => this.dashboardService.transactions.set(res),
+        error: (err) => console.error('Failed to load transactions', err) 
+      }
+    );
   }
 }

@@ -12,7 +12,9 @@ import { RouterOutlet } from "@angular/router";
   template: `
     <div class="flex min-h-screen bg-[#0e1511] text-[#dde4dd]">
       <app-sidebar />
-      <router-outlet />
+      <div class="flex-1 w-full">
+        <router-outlet />
+      </div>
     </div>
     <app-mobile-nav />
   `,
