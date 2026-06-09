@@ -8,7 +8,8 @@ import { AuthService } from '../services/auth.service';
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   template: `<div class="min-h-screen flex flex-col items-center justify-center bg-[#09090b] px-4">
-    <h1 class="text-3xl font-bold text-[#4edea3] mb-8 tracking-tight">FinŁad</h1>
+    <i class="fa-solid fa-hand-holding-dollar  text-[#10b981] text-5xl mb-2"></i>
+    <h1 class="text-4xl font-bold text-[#10b981] mb-8 tracking-tight">FinŁad</h1>
 
     <div class="w-full max-w-md bg-[#18181b] border border-zinc-800 rounded-lg p-8">
       <h2 class="text-2xl font-semibold text-zinc-100 mb-1">Create Account</h2>
