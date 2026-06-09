@@ -10,9 +10,10 @@ namespace FinLad.Api.Controllers;
 [Authorize]
 [Route("api/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-public class WalletsController(WalletService walletService) : ControllerBase
+public class WalletController(WalletService walletService) : ControllerBase
 {
     private readonly WalletService _walletService = walletService;
+    
     [HttpGet]
     public async Task<IActionResult> GetWallets()
     {   

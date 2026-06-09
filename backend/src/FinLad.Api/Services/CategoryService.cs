@@ -1,4 +1,5 @@
 using Finlad.Domain.Entities;
+using Finlad.Domain.Enums;
 using FinLad.Api.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,8 +12,7 @@ public class CategoryService(AppDbContext context)
     public async Task EnsureDefaultCategoriesAsync()
     {
         var existing = await _context.Categories.Select(c => c.Name).ToListAsync();
-
-        var defaults = new[] { "Food", "Transport", "Utilities", "Housing", "Entertainment", "Health", "Education", "Shopping", "Salary", "Other" };
+        var defaults = Enum.GetNames<CategoryType>();
 
         foreach (var name in defaults)
         {

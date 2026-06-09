@@ -10,21 +10,27 @@ public class TransactionService(AppDbContext context)
 {
     private readonly AppDbContext _context = context;
 
-    public async Task<string[]> GetCategoryNamesAsync(Guid userId)
+    
+    public async Task<IReadOnlyCollection<TransactionDto>>GetByUserIdAsync(Guid userId)
     {
-        return await _context.Categories
-            .Select(c => c.Name)
-            .Distinct()
-            .ToArrayAsync();
+        return await _context.Transactions
+            .AsNoTracking()
+            .Where(t => t.UserId == userId)
+            .OrderByDescending(t => t.Date)
+            .Include(t => t.Category)
+            .Include(t => t.Wallet)
+            .Select(t => new TransactionDto(
+                t.Id,
+                t.Amount,
+                t.Type.ToString(),
+                t.Category.Name,
+                t.Wallet.Name,
+                t.Description,
+                t.Date
+            ))
+            .ToListAsync();
     }
 
-    public async Task<string[]> GetWalletNamesAsync(Guid userId)
-    {
-        return await _context.Wallets
-            .Where(w => w.UserId == userId)
-            .Select(w => w.Name)
-            .ToArrayAsync();
-    }
 
     public async Task<TransactionDto> CreateFromParsedAsync(ParsedTransaction parsed, Guid userId)
     {
@@ -93,4 +99,26 @@ public class TransactionService(AppDbContext context)
             transaction.Date
         );
     }
+
+    public async Task<IReadOnlyCollection<CategoryExpenseDto>> GetExpensesByCategoryAsync(Guid userId)
+    {
+        var grouped = await _context.Transactions
+            .Where(t => t.Type == TransactionType.Expense && t.UserId == userId)
+            .GroupBy(t => t.Category.Name)
+            .Select(g => new { Category = g.Key, Total = g.Sum(t => t.Amount) })
+            .ToListAsync();
+
+        var grandTotal = grouped.Sum(x => x.Total);
+
+        var categories = Enum.GetNames<CategoryType>().Where(c => c != "Salary");
+        return [.. categories.Select(name =>
+        {
+            var match = grouped.FirstOrDefault(g => g.Category == name);
+            var total = match?.Total ?? 0;
+            var percentage = grandTotal > 0 ? Math.Round(total / grandTotal * 100, 1) : 0;
+            return new CategoryExpenseDto(name, total, percentage);
+        })];
+    }
 }
+
+

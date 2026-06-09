@@ -7,5 +7,3 @@ public enum WalletType
     Cash,   
     DigitalWallet  
 }
-
-

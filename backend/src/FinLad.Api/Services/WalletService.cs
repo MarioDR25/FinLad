@@ -12,13 +12,37 @@ public class WalletService(AppDbContext context)
 
     public ICollection<Wallet> CreateDefaultWallets(Guid userId)
     {
-        return
-        [
-            new(){ Name = WalletType.BankAccount.ToString(), Type = WalletType.BankAccount, Balance = 0.00m, UserId = userId, Description = "Main bank account", Icon = "fa-building-columns",  Tag = "MAIN" },
-            new(){ Name = WalletType.CreditCard.ToString(), Type = WalletType.CreditCard, Balance = 0.00m, UserId = userId, Description = "Credit card tracking", Icon = "fa-credit-card", Tag = "CREDIT"},
-            new(){ Name = WalletType.Cash.ToString(), Type = WalletType.Cash, Balance = 0.00m, UserId = userId, Description = "Physical cash", Icon = "fa-coins",  Tag = "DAILY" },
-            new(){ Name = WalletType.DigitalWallet.ToString(), Type = WalletType.DigitalWallet, Balance = 0.00m, UserId = userId, Description = "Digital platforms", Icon = "fa-mobile-screen", Tag = "DIGITAL"}
-        ];
+        return [.. Enum.GetValues<WalletType>().Select(type => new Wallet
+        {
+            Name = type.ToString(),
+            Type = type,
+            Balance = 0.00m,
+            UserId = userId,
+            Description = type switch
+            {
+                WalletType.BankAccount => "Main bank account",
+                WalletType.CreditCard => "Credit card tracking",
+                WalletType.Cash => "Physical cash",
+                WalletType.DigitalWallet => "Digital platforms",
+                _ => string.Empty
+            },
+            Icon = type switch
+            {
+                WalletType.BankAccount => "fa-building-columns",
+                WalletType.CreditCard => "fa-credit-card",
+                WalletType.Cash => "fa-coins",
+                WalletType.DigitalWallet => "fa-mobile-screen",
+                _ => string.Empty
+            },
+            Tag = type switch
+            {
+                WalletType.BankAccount => "MAIN",
+                WalletType.CreditCard => "CREDIT",
+                WalletType.Cash => "DAILY",
+                WalletType.DigitalWallet => "DIGITAL",
+                _ => string.Empty
+            }
+        })];
     }
 
 
@@ -36,5 +60,3 @@ public class WalletService(AppDbContext context)
                         ).ToListAsync();
     }
 }
-
-

@@ -13,18 +13,39 @@ namespace FinLad.Api.Controllers;
 [Produces(MediaTypeNames.Application.Json)]
 public class TransactionController(AiService aiService, TransactionService transactionService) : ControllerBase
 {
+    private readonly AiService _aiService = aiService;
+    private readonly TransactionService _transactionService = transactionService;
+
+    [HttpGet]
+    public async Task<IActionResult> GetTransactions()
+    {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var transactions = await _transactionService.GetByUserIdAsync(userId);
+        return Ok(transactions);
+    }
+
+
+
     [HttpPost("ai")]
     public async Task<IActionResult> Parse([FromBody] AiTransactionRequest request)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-        var parsed = await aiService.ParseTransactionAsync(request.DataInput);
+        var parsed = await _aiService.ParseTransactionAsync(request.DataInput);
 
         if (!parsed.IsValid)
             return BadRequest(new { error = parsed.Error ?? "Could not understand the transaction. Try being more specific." });
 
-        var dto = await transactionService.CreateFromParsedAsync(parsed, userId);
+        var dto = await _transactionService.CreateFromParsedAsync(parsed, userId);
 
         return Ok(dto);
+    }
+
+    [HttpGet("by-category")]
+    public async Task<IActionResult> GetByCategory()
+    {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var result = await _transactionService.GetExpensesByCategoryAsync(userId);
+        return Ok(result);
     }
 }

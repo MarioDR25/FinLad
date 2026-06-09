@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using Finlad.Domain.Enums;
@@ -67,7 +66,7 @@ public class AiService(HttpClient http, IOptions<AiSettings> aiOptions)
             - "wallet" must be one of the wallets above. For Transfer, this is the SOURCE wallet (where money comes FROM). Use CreditCard for "tarjeta"/"card", BankAccount for "banco"/"cuenta"/"bank", Cash for "efectivo"/"cash", DigitalWallet for "digital"/"app"
             - "toWallet" must be one of the wallets above. Only required for Transfer, this is where money goes TO. Use Cash for "retiré"/"withdraw" if no destination, BankAccount for "deposité"/"consigné" if no destination. Use null for Income/Expense
             - "amount" is always a positive number
-            - "description" is a short summary of what happened
+            - "description" is a very brief summary (max 3 words). Never include the payment method or wallet name. Example: "almuerzo", "zapatos hijo", "semestre universidad", "uber"
             - "date" (yyyy-MM-dd). Use today's date if the message says "today"/"hoy", yesterday if "ayer"/"yesterday", or the date mentioned. If no date at all, set to null
 
             If the message is not a financial transaction, return:
