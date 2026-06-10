@@ -47,7 +47,7 @@ Chart.register(
     </section>
 
     <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
-      @for (wallet of walletsList(); track wallet.id) {
+      @for (wallet of svc.wallets(); track wallet.id) {
         <app-wallet-card [data]="wallet" />
       }
     </section>
@@ -55,55 +55,17 @@ Chart.register(
     <app-ai-input />
     
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 ">
-      <app-doughnut-chart class="lg:col-span-5" [data]="expensesCategory()"/>
-      <app-transaction-table class="lg:col-span-7" [data]="transactionsList()" />
+      <app-doughnut-chart class="lg:col-span-5" [data]="svc.expensesCategory()"/>
+      <app-transaction-table class="lg:col-span-7" [data]="svc.transactions()" />
     </section>
     
-    <app-line-chart [data]="dashboardService.dataLine" />
+    <app-line-chart [incomes]="svc.monthlyIncome()" [expenses]="svc.monthlyExpenses()" />
 
   </main>`,
 })
 export class Dashboard {
-  dashboardService = inject(DashboardService);
-  walletsList = this.dashboardService.wallets;
-  transactionsList = this.dashboardService.transactions;
-  expensesCategory = this.dashboardService.expensesCategory;
+  readonly svc = inject(DashboardService);
   
-  totalBalance = computed(() =>  this.walletsList().reduce((acc, wallet) => acc + wallet.balance, 0));
-
-  ngOnInit() {
-     this.onLoadWallets();
-     this.onLoadTransactions();
-     this.onloadExpensesByCategory();
-  }
-
-
-  onLoadWallets(){
-    this.dashboardService.loadWallets().subscribe(
-      {
-        next:(res) => this.dashboardService.wallets.set(res),
-        error: (err) => console.error('Failed to load wallets', err) 
-      }
-    );
-  }
-
-  onloadExpensesByCategory(){
-    this.dashboardService.loadExpensesByCategory().subscribe(
-      {
-        next:(res) => this.dashboardService.expensesCategory.set(res),
-        error: (err) => console.error('Failed to load Expenses', err) 
-      }
-    );
-  }
-
-
-
-  onLoadTransactions(){
-    this.dashboardService.loadTransactions().subscribe(
-      {
-        next:(res) => this.dashboardService.transactions.set(res),
-        error: (err) => console.error('Failed to load transactions', err) 
-      }
-    );
-  }
+  readonly totalBalance = computed(() =>  
+    this.svc.wallets().reduce((acc, wallet) => acc + wallet.balance, 0));
 }

@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, viewChild, ElementRef } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { DashboardService } from '../services/dashboard.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { DashboardService } from '../services/dashboard.service';
         <span class="text-[#4edea3] mr-4 text-lg">✨</span>
         <input #inputIA type="text" class="w-full bg-transparent border-none outline-none text-base text-[#dde4dd] placeholder-[#bbcabf]/40"
           placeholder="Describe tu movimiento... (ej: 'gasté 45 zl en comida con mi tarjeta')" />
-        <button (click)="onCreateTransaction(inputIA.value)" [disabled]="loading()"
+        <button (click)="onCreateTransaction(inputIA)" [disabled]="loading()"
           class="ml-4 w-10 h-10 rounded-full bg-[#4edea3] text-[#003824] flex items-center justify-center hover:scale-105 active:scale-95 transition-transform text-lg disabled:opacity-50">
           ➤
         </button>
@@ -27,37 +27,25 @@ import { DashboardService } from '../services/dashboard.service';
   `,
 })
 export class AiInput {
-  private dashboardService = inject(DashboardService);
+  private svc = inject(DashboardService);
 
-  message = signal('');
-  hasText = computed(() => this.message().trim().length > 0);
-  loading = signal(false);
-  isError = signal(false);
+  loading = this.svc.createLoading;
+  isError = computed(() => this.svc.createError() !== null);
 
-  onCreateTransaction(input: string): void {
-    if (input.trim().length === 0) {
-      this.message.set('Describe your transaction first');
-      this.isError.set(true);
-      return;
-    }
+  message = computed(() => {
+    const res = this.svc.lastCreated();
+    const err = this.svc.createError();
+    if (res) return `Done! ${res.type === 'Expense' ? '-' : '+'}${res.amount.toFixed(2)} PLN — ${res.description}`;
+    if (err) return err;
+    return '';
+  });
 
-    this.loading.set(true);
-    this.message.set('');
-    this.isError.set(false);
+  hasText = computed(() => this.message().length > 0);
 
-    this.dashboardService.createTransaction(input).subscribe({
-      next: (res) => {
-        this.message.set(`Done! ${res.type === 'Expense' ? '-' : '+'}${res.amount.toFixed(2)} PLN — ${res.description}`);
-        this.isError.set(false);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.log(err.error.message, 'soy el error')
-        this.message.set(err.error?.error || 'Something went wrong. Try again.');
-        this.isError.set(true);
-        this.loading.set(false);
-      },
-    });
+  onCreateTransaction(input: HTMLInputElement): void {
+    const value = input.value.trim();
+    if (!value) return;
+    this.svc.createTransaction(value);
+    input.value = '';
   }
 }
-

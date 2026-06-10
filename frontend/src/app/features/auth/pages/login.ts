@@ -78,10 +78,6 @@ export class LoginComponent {
     password: ['', Validators.required],
   });
 
-  debugClick() {
-    console.log('clicked');
-  }
-
   onSubmit(): void {
     console.log('form valid:', this.form.valid, 'form value:', this.form.value);
     if (this.form.invalid) {
