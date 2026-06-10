@@ -31,3 +31,6 @@ public record TransactionDto(
     string Description,
     DateTime Date
 );
+
+
+public record TransactionByMonthDto( string Month, decimal Amount );

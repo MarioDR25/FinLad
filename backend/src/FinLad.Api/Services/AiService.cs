@@ -9,7 +9,6 @@ namespace FinLad.Api.Services;
 
 public class AiService(HttpClient http, IOptions<AiSettings> aiOptions)
 {
-
     private readonly AiSettings _aiSettings = aiOptions.Value;
     public async Task<ParsedTransaction> ParseTransactionAsync(string userInput)
     {
@@ -47,6 +46,7 @@ public class AiService(HttpClient http, IOptions<AiSettings> aiOptions)
 
     private static string BuildPrompt(string userInput)
     {
+        var today = DateTime.UtcNow.ToString("yyyy-MM-dd");
         var categories = Enum.GetNames<CategoryType>();
         var types = Enum.GetNames<TransactionType>();
         var wallets = Enum.GetNames<WalletType>();
@@ -55,6 +55,8 @@ public class AiService(HttpClient http, IOptions<AiSettings> aiOptions)
         return $"""
             You are a financial transaction parser. Analyze this message and return ONLY a JSON object.
             Pick the best matching value from each list below based on the user's message.
+
+            Today's date is {today}.
 
             Types: [{string.Join(", ", types)}]
             Categories: [{string.Join(", ", categories)}]
@@ -67,7 +69,7 @@ public class AiService(HttpClient http, IOptions<AiSettings> aiOptions)
             - "toWallet" must be one of the wallets above. Only required for Transfer, this is where money goes TO. Use Cash for "retiré"/"withdraw" if no destination, BankAccount for "deposité"/"consigné" if no destination. Use null for Income/Expense
             - "amount" is always a positive number
             - "description" is a very brief summary (max 3 words). Never include the payment method or wallet name. Example: "almuerzo", "zapatos hijo", "semestre universidad", "uber"
-            - "date" (yyyy-MM-dd). Use today's date if the message says "today"/"hoy", yesterday if "ayer"/"yesterday", or the date mentioned. If no date at all, set to null
+            - "date" (yyyy-MM-dd). If "today"/"hoy" is mentioned, use the date above. If "ayer"/"yesterday", subtract 1 day. If a specific date is mentioned, use that. If no date at all, set to null
 
             If the message is not a financial transaction, return:
             {errorExample}

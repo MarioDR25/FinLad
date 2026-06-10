@@ -31,7 +31,6 @@ public class TransactionService(AppDbContext context)
             .ToListAsync();
     }
 
-
     public async Task<TransactionDto> CreateFromParsedAsync(ParsedTransaction parsed, Guid userId)
     {
         if (string.IsNullOrWhiteSpace(parsed.Category))
@@ -71,6 +70,9 @@ public class TransactionService(AppDbContext context)
             WalletId = wallet.Id,
             UserId = userId
         };
+
+        if ((type == TransactionType.Expense || type == TransactionType.Transfer) && wallet.Balance < parsed.Amount)
+            throw new InvalidOperationException($"Insufficient balance in {wallet.Name}. Available: {wallet.Balance} PLN");
 
         if (type == TransactionType.Income)
             wallet.Balance += parsed.Amount;
@@ -119,6 +121,24 @@ public class TransactionService(AppDbContext context)
             return new CategoryExpenseDto(name, total, percentage);
         })];
     }
+
+
+    public async Task<IReadOnlyCollection<TransactionByMonthDto>> GetMonthlyTransactions(Guid userId, string transactionType, int? year = null)
+    {
+        var targetYear = year ?? DateTime.UtcNow.Year;
+        var type = Enum.Parse<TransactionType>(transactionType); 
+
+        var grouped = await _context.Transactions
+            .Where(t => t.Type == type && t.UserId == userId && t.Date.Year == targetYear)
+            .GroupBy(t => t.Date.Month)
+            .Select(g => new { Month = g.Key, Total = g.Sum(t => t.Amount) })
+            .ToListAsync();
+
+        var monthNames = System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames;
+        return [.. grouped.Select(g => new TransactionByMonthDto(monthNames[g.Month - 1], g.Total))];
+    }
 }
+
+
 
 
