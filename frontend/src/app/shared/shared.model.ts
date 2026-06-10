@@ -23,3 +23,9 @@ export interface ExpensesCategory {
   total:      number;
   percentage: number;
 }
+
+
+export interface MonthlyTransactions {
+  month:  string;
+  amount: number;
+}

@@ -1,52 +1,123 @@
-import { inject, Injectable, Signal, signal } from '@angular/core';
-import { ExpensesCategory, Transaction, WalletData } from '../../../shared/shared.model';
-import { ChartData  } from 'chart.js';
+import * as signalR from '@microsoft/signalr';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { Observable, tap } from 'rxjs';
-@Injectable({
-  providedIn: 'root',
-})
+import { ExpensesCategory, MonthlyTransactions, Transaction, WalletData } from '../../../shared/shared.model';
+
+@Injectable({ providedIn: 'root' })
 export class DashboardService {
   private http = inject(HttpClient);
+  private hubConnection!: signalR.HubConnection;
 
-  wallets = signal<WalletData[]>([]);
-  transactions = signal<Transaction[]>([]);
-  expensesCategory = signal<ExpensesCategory[]>([]);
+  apiUrl = environment.apiUrl;
+  urlTransaction = `${this.apiUrl}/Transaction`;
+
+  readonly wallets = signal<WalletData[]>([]);
+  readonly transactions = signal<Transaction[]>([]);
+  readonly expensesCategory = signal<ExpensesCategory[]>([]);
+  readonly monthlyExpenses = signal<MonthlyTransactions[]>([]);
+  readonly monthlyIncome = signal<MonthlyTransactions[]>([]);
+
+  readonly lastCreated = signal<Transaction | null>(null);
+  readonly createError = signal<string | null>(null);
+  readonly createLoading = signal(false);
 
 
-  dataLine: ChartData<'line'> = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      datasets: [
-        { data: [2200, 2100, 2500, 2800, 3000, 3000, 3100, 3000, 3300, 3700, 3000, 2900], label: 'Income', borderColor: '#adc6ff', backgroundColor: 'rgba(173,198,255,0.1)', fill: true, tension: 0.4, pointBackgroundColor: '#adc6ff', pointRadius: 4 },
-        { data: [2000, 1900, 2000, 2100, 2300, 2200, 2400, 2500, 2300, 2600, 2400, 2500], label: 'Expenses', borderColor: '#ffb4ab', backgroundColor: 'rgba(255,180,171,0.1)', fill: true, tension: 0.4, pointBackgroundColor: '#ffb4ab', pointRadius: 4 },
-      ],
-  }; 
-
-   
-  loadWallets (): Observable<WalletData[]> { 
-    return this.http.get<WalletData[]>(`${environment.apiUrl}/Wallet`) 
-  } 
-
-  loadTransactions(){
-    return this.http.get<Transaction[]>(`${environment.apiUrl}/Transaction`) 
+  constructor() {
+    this.loadTransactions();
+    this.loadAll();
+    this.startConnection();
   }
 
-  loadExpensesByCategory(){
-    return this.http.get<ExpensesCategory[]>(`${environment.apiUrl}/Transaction/by-category`) 
+
+  private loadTransactions() {
+    this.http.get<Transaction[]>(this.urlTransaction)
+      .subscribe({
+        next: (data) => { this.transactions.set(data)},
+        error: (err) => { console.error("Failed to load transactions", err)}
+      });
   }
-  
-  createTransaction(input: string): Observable<Transaction> {
-    return this.http.post<Transaction>(`${environment.apiUrl}/Transaction/ai`, { dataInput: input }).pipe(
-      tap((a) => console.log(a, '<- :debo llegar aqui'))
-    )
-  } 
+
+  private loadAll() {
+    this.http.get<WalletData[]>(`${this.apiUrl}/Wallet`)
+      .subscribe({
+        next: (data) => { this.wallets.set(data)},
+        error: (err) => { console.error("Failed to load wallets", err)}
+      });
+
+    this.http.get<ExpensesCategory[]>(`${this.urlTransaction}/by-category`)
+      .subscribe({
+        next: (data) => { this.expensesCategory.set(data)},
+        error: (err) => { console.error("Failed to load Expenses by category", err)}
+      });
+
+    this.http.get<MonthlyTransactions[]>(`${this.urlTransaction}/monthly?type=Expense`)
+      .subscribe({
+        next: (data) => { this.monthlyExpenses.set(data)},
+        error: (err) => { console.error("Failed to load Expenses", err)}
+      });
+
+    this.http.get<MonthlyTransactions[]>(`${this.urlTransaction}/monthly?type=Income`)
+      .subscribe({
+        next: (data) => { this.monthlyIncome.set(data)},
+        error: (err) => { console.error("Failed to load Income", err)}
+      });
+  }
 
 
 
+  createTransaction(input: string): void {
+    this.createLoading.set(true);
+    this.createError.set(null);
+    this.lastCreated.set(null);
+
+    this.http.post<Transaction>(`${this.urlTransaction}/ai`, { dataInput: input })
+      .subscribe({
+        next: (res) => {
+          
+          this.lastCreated.set(res);
+          this.createLoading.set(false);
+        },
+        error: (err) => {
+          this.createError.set(err.error?.error || 'Something went wrong');
+          this.createLoading.set(false);
+        }
+      });
+  }
 
 
+  private startConnection() {
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl('http://localhost:5000/hubs/transactions')
+      .withAutomaticReconnect()
+      .build();
+
+    
+    this.hubConnection.on('TransactionCreated', (newTransaction: Transaction) => {
+      
+      this.transactions.update(list => {
+        if (list.some(t => t.id === newTransaction.id)) return list;
+        return [newTransaction, ...list];
+      });
+
+      this.loadAll();
+    });
+
+    this.hubConnection.onreconnected(() => {
+      console.log('Reconectado, recargando datos...');
+      this.loadAll();
+    });
+
+    this.hubConnection.start()
+      .then(() => console.log('Conexión iniciada'))
+      .catch(err => console.error('Error al conectar', err));
+  }
+
+
+  disconnect() {
+  this.hubConnection.stop()
+    .then(() => console.log('Closed connection'))
+    .catch(err => console.error('Error closing connection', err));
+  }
 
 }
-
-
