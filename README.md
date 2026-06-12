@@ -7,23 +7,29 @@ Personal finance management app powered by AI. Log your income and expenses usin
 | Layer | Technology |
 |-------|-----------|
 | Backend | .NET 9 (ASP.NET Core Web API, SignalR) |
-| Frontend | Angular 21 (Tailwind CSS, Angular Material, Chart.js) |
+| Frontend | Angular 21 (Tailwind CSS, Chart.js, ng2-charts) |
 | Database | PostgreSQL (Supabase) |
 | Auth | JWT (Bearer tokens) |
 | AI | DeepSeek API |
+| CI | GitHub Actions |
 
-## Features (in progress)
+## Features
 
 - [x] User registration & login (JWT)
-- [x] Dashboard with charts (Chart.js)
-- [x] Wallet management
-- [x] Transaction & category entities
-- [ ] AI chat assistant for transaction input
-- [ ] Real-time dashboard updates (SignalR)
-- [ ] Analytics & reports
+- [x] AI transaction parsing (natural language to structured data)
+- [x] Dashboard with real-time charts (line + doughnut)
+- [x] Wallet management with dynamic balances
+- [x] Transaction history with year filtering
+- [x] Analytics page (expenses by category, monthly breakdown)
+- [x] Real-time updates via SignalR
+- [x] Transfer support (move money between wallets)
+- [x] Responsive design (mobile + desktop)
+- [x] CI pipeline (build + test on push)
+- [ ] Password reset
 - [ ] Budget tracking
+- [ ] Deployment
 
-> **Status:** In active development. Not ready for production use.
+> **Status:** In active development.
 
 ## Getting Started
 
@@ -38,4 +44,4 @@ npm install
 npm start
 ```
 
-Backend runs on `http://localhost:5000`, frontend on `http://localhost:4200`.
+Backend: `http://localhost:5000` | Frontend: `http://localhost:4200` | Swagger: `http://localhost:5000/swagger`
