@@ -19,9 +19,13 @@
 
 ---
 
-## Why FinLad?
+## What is FinLad?
 
-Most finance apps make you fill out tedious forms: amount, category, wallet, date, description — click, click, click. FinLad replaces all of that with a single text input. Describe what happened in plain language and the AI does the rest.
+FinLad is a web application for managing personal finances without the friction of traditional form-based apps. Instead of filling out fields manually, you simply type what happened in natural language — *"received my salary of 5,000 PLN deposited to my bank"* — and the AI engine parses, categorizes, and records the transaction automatically.
+
+The app supports income, expenses, and transfers between wallets, updates balances in real time via SignalR, and provides visual analytics through interactive charts. Everything is protected behind JWT authentication with a responsive interface built with Angular and Tailwind CSS.
+
+---
 
 ## How It Works
 
@@ -56,6 +60,8 @@ User types: "gasté 45 PLN en almuerzo con mi tarjeta de crédito"
                    └──────────────┘
 ```
 
+---
+
 ## Features
 
 ### Authentication & Security
@@ -68,7 +74,6 @@ User types: "gasté 45 PLN en almuerzo con mi tarjeta de crédito"
 - Supports **Income**, **Expense**, and **Transfer** types
 - Auto-detects categories, wallets, amounts, and dates
 - Input validation prevents gibberish and incomplete data
-- Brief descriptions (max 3 words, no payment method)
 
 ### Wallet Management
 - 4 default wallets per user: Bank Account, Credit Card, Cash, Digital Wallet
@@ -82,19 +87,27 @@ User types: "gasté 45 PLN en almuerzo con mi tarjeta de crédito"
 - AI input bar for quick transaction entry
 - Doughnut chart: expenses breakdown by category
 - Line chart: monthly income vs expenses comparison
-- Recent transactions table (5 most recent)
+- Recent transactions table
 - Toast notifications for real-time updates
 
 ### Analytics & History
 - **Analytics page**: full charts with year selector
 - **Transactions page**: complete history with date, category, type, wallet, and amount
-- **Wallets page**: detailed view of all wallets with descriptions
+- **Wallets page**: detailed view of all wallets
 
 ### Responsive Design
 - Mobile-first with Tailwind CSS
 - Collapsible sidebar for desktop
 - Bottom navigation bar for mobile
 - All charts and tables adapt to screen size
+
+---
+
+## Why Not Just Use Excel?
+
+Most finance apps make you fill out tedious forms: amount, category, wallet, date, description — click, click, click. FinLad replaces all of that with a single text input. Describe what happened in plain language and the AI does the rest.
+
+---
 
 ## Architecture
 
@@ -112,18 +125,11 @@ finlad-app/
 └── frontend/
     └── src/app/
         ├── core/                  # Shared services, guards, models
-        │   ├── services/          # FinanceDataService, StorageService
-        │   ├── guards/            # authGuard, noAuthGuard
-        │   ├── interceptors/      # JWT interceptor
-        │   └── models/            # TypeScript interfaces
-        ├── features/              # Feature modules
-        │   ├── auth/              # Login, register, AuthService
-        │   ├── dashboard/         # Dashboard + components (charts, cards)
-        │   ├── wallets/           # Wallet list page
-        │   ├── analytics/         # Charts + year filter page
-        │   └── transactions/      # Full history + year filter page
+        ├── features/              # auth, dashboard, wallets, analytics, transactions
         └── layout/                # Sidebar, mobile nav, main layout
 ```
+
+---
 
 ## Tech Stack
 
@@ -139,10 +145,12 @@ finlad-app/
 | AI/LLM | DeepSeek API (OpenAI-compatible) |
 | Charts | Chart.js via ng2-charts |
 | Styling | Tailwind CSS 4 |
-| Testing | xUnit (.NET), Vitest (Angular) |
+| Testing | xUnit (.NET) |
 | CI/CD | GitHub Actions |
 
-## API Endpoints
+---
+
+## API Reference
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
@@ -154,25 +162,18 @@ finlad-app/
 | `GET` | `/api/transaction/by-category` | Yes | Expenses grouped by category |
 | `GET` | `/api/transaction/monthly?type=&year=` | Yes | Monthly income/expense breakdown |
 
+---
+
 ## Getting Started
 
-### Prerequisites
-- .NET 9 SDK
-- Node.js 22+
-- PostgreSQL (or Supabase account)
-- DeepSeek API key
-
-### Setup
-
 ```bash
-# Clone
 git clone https://github.com/MarioDR25/FinLad.git
 cd FinLad
 
 # Backend
 cd backend
 cp src/FinLad.Api/appsettings.Example.json src/FinLad.Api/appsettings.json
-# Edit appsettings.json with your DB and DeepSeek credentials
+# Configure your settings, then:
 dotnet run --project src/FinLad.Api
 
 # Frontend
@@ -180,12 +181,3 @@ cd frontend
 npm install
 npm start
 ```
-
-Backend API at `http://localhost:5000` — Swagger docs at `/swagger`  
-Frontend at `http://localhost:4200`
-
----
-
-<p align="center">
-  <sub>Built with ❤️ using .NET, Angular & DeepSeek</sub>
-</p>
