@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { MonthlyTransactions } from '../../../shared/shared.model';
+import { MonthlyTransactions } from '../../../core/models/shared.model';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const MONTH_MAP: Record<string, number> = {
@@ -16,7 +16,7 @@ const MONTH_MAP: Record<string, number> = {
   standalone: true,
   imports: [BaseChartDirective],
   template: `
-    <section class="w-full p-8 rounded-xl border border-[#3c4a42] bg-[#161d19]">
+    <section class="w-full p-4 md:p-8 rounded-xl border border-[#3c4a42] bg-[#161d19]">
       <div class="flex justify-between items-center mb-8">
         <div>
           <h3 class="text-xl font-semibold text-[#dde4dd]">Income vs Expenses</h3>
@@ -27,7 +27,7 @@ const MONTH_MAP: Record<string, number> = {
           <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#EE2711]"></span><span class="text-xs text-[#bbcabf]">Expenses</span></div>
         </div>
       </div>
-      <div class="h-75">
+      <div class="h-50 md:h-75">
         <canvas baseChart [type]="type" [data]="dataLine()" [options]="options" class="w-full h-full"></canvas>
       </div>
     </section>

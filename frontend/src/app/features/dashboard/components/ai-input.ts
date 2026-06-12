@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { DashboardService } from '../services/dashboard.service';
+import { FinanceDataService } from '../../../core/services/finance-data.service';
 
 @Component({
   selector: 'app-ai-input',
@@ -27,15 +27,13 @@ import { DashboardService } from '../services/dashboard.service';
   `,
 })
 export class AiInput {
-  private svc = inject(DashboardService);
+  private svc = inject(FinanceDataService);
 
   loading = this.svc.createLoading;
   isError = computed(() => this.svc.createError() !== null);
 
   message = computed(() => {
-    const res = this.svc.lastCreated();
     const err = this.svc.createError();
-    if (res) return `Done! ${res.type === 'Expense' ? '-' : '+'}${res.amount.toFixed(2)} PLN — ${res.description}`;
     if (err) return err;
     return '';
   });

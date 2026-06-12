@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartType } from 'chart.js';
-import { ExpensesCategory } from '../../../shared/shared.model';
+import { ExpensesCategory } from '../../../core/models/shared.model';
 
 const COLORS = ['#4edea3', '#adc6ff', '#ffb3af', '#fbbf24', '#a78bfa', '#34d399', '#f472b6', '#60a5fa', '#fb923c', '#94a3b8'];
 
@@ -10,18 +10,18 @@ const COLORS = ['#4edea3', '#adc6ff', '#ffb3af', '#fbbf24', '#a78bfa', '#34d399'
   standalone: true,
   imports: [BaseChartDirective],
   template: `
-    <div class="p-8 rounded-xl border border-[#3c4a42] bg-[#161d19] flex flex-col items-center">
+    <div class="p-4 md:p-8 rounded-xl border border-[#3c4a42] bg-[#161d19] flex flex-col items-center">
       <div class="w-full flex justify-between items-center mb-8">
         <h3 class="text-xl font-semibold text-[#dde4dd]">Expenses by Category</h3>
       </div>
-      <div class="w-60 h-60 relative flex items-center justify-center">
+      <div class="w-48 h-48 md:w-60 md:h-60 relative flex items-center justify-center">
         <canvas baseChart [type]="type" [data]="chartData()" [options]="options"></canvas>
         <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span class="text-2xl font-semibold text-[#dde4dd]">{{ totalSpent() }}</span>
           <span class="text-[10px] text-[#bbcabf] uppercase tracking-widest">Total Spent</span>
         </div>
       </div>
-      <div class="w-full mt-10 grid grid-cols-3 gap-4">
+      <div class="w-full mt-8 grid grid-cols-3 gap-4">
         @for (item of data(); track item.category) {
           <div class="flex flex-col items-center">
               <div class="flex items-center gap-2 mb-1">

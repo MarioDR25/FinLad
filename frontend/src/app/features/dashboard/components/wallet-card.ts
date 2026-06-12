@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { WalletData } from '../../../shared/shared.model';
+import { WalletData } from '../../../core/models/shared.model';
 
 @Component({
   selector: 'app-wallet-card',
