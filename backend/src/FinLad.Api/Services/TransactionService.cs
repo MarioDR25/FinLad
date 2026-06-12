@@ -11,11 +11,16 @@ public class TransactionService(AppDbContext context)
     private readonly AppDbContext _context = context;
 
     
-    public async Task<IReadOnlyCollection<TransactionDto>>GetByUserIdAsync(Guid userId)
+    public async Task<IReadOnlyCollection<TransactionDto>>GetByUserIdAsync(Guid userId, int? year = null)
     {
-        return await _context.Transactions
+        var query = _context.Transactions
             .AsNoTracking()
-            .Where(t => t.UserId == userId)
+            .Where(t => t.UserId == userId);
+
+        if (year.HasValue)
+            query = query.Where(t => t.Date.Year == year.Value);
+
+        return await query
             .OrderByDescending(t => t.Date)
             .Include(t => t.Category)
             .Include(t => t.Wallet)

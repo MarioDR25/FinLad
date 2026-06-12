@@ -21,10 +21,10 @@ public class TransactionController(AiService aiService, TransactionService trans
 
 
     [HttpGet]
-    public async Task<IActionResult> GetTransactions()
+    public async Task<IActionResult> GetTransactions([FromQuery] int? year)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var transactions = await _transactionService.GetByUserIdAsync(userId);
+        var transactions = await _transactionService.GetByUserIdAsync(userId, year);
         return Ok(transactions);
     }
 
