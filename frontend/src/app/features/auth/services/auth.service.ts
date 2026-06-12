@@ -5,14 +5,14 @@ import { RegisterDto, LoginDto, AuthResponseDto } from '../auth.model';
 import { environment } from '../../../../environments/environment';
 import { StorageService } from '../../../core/services/storage.service';
 import { Router } from '@angular/router';
-import { DashboardService } from '../../dashboard/services/dashboard.service';
+import { FinanceDataService } from '../../../core/services/finance-data.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly router = inject(Router);
   private http = inject(HttpClient);
   private storage = inject(StorageService);
-  private dashboardSvc = inject(DashboardService);
+  private dashboardSvc = inject(FinanceDataService);
   
   private token = signal<string | null>(this.storage.get('token'));
   public isAuthenticated = computed(() => !!this.token());

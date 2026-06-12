@@ -1,11 +1,11 @@
 import * as signalR from '@microsoft/signalr';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { environment } from '../../../../environments/environment';
-import { ExpensesCategory, MonthlyTransactions, Transaction, WalletData } from '../../../shared/shared.model';
+import { environment } from '../../../environments/environment';
+import { ExpensesCategory, MonthlyTransactions, Transaction, WalletData } from '../models/shared.model';
 
 @Injectable({ providedIn: 'root' })
-export class DashboardService {
+export class FinanceDataService {
   private http = inject(HttpClient);
   private hubConnection!: signalR.HubConnection;
 
@@ -24,13 +24,11 @@ export class DashboardService {
 
 
   constructor() {
-    this.loadTransactions();
-    this.loadAll();
     this.startConnection();
   }
 
 
-  private loadTransactions() {
+  loadTransactions() {
     this.http.get<Transaction[]>(this.urlTransaction)
       .subscribe({
         next: (data) => { this.transactions.set(data)},
@@ -38,7 +36,7 @@ export class DashboardService {
       });
   }
 
-  private loadAll() {
+  loadAll() {
     this.http.get<WalletData[]>(`${this.apiUrl}/Wallet`)
       .subscribe({
         next: (data) => { this.wallets.set(data)},
@@ -85,6 +83,20 @@ export class DashboardService {
       });
   }
 
+
+  loadMonthlyByYear(year: number) {
+    this.http.get<MonthlyTransactions[]>(`${this.urlTransaction}/monthly?type=Expense&year=${year}`)
+      .subscribe({ next: (d) => this.monthlyExpenses.set(d) });
+    this.http.get<MonthlyTransactions[]>(`${this.urlTransaction}/monthly?type=Income&year=${year}`)
+      .subscribe({ next: (d) => this.monthlyIncome.set(d) });
+  }
+
+  
+  
+  loadTransactionsByYear(year: number) {
+    this.http.get<Transaction[]>(`${this.urlTransaction}?year=${year}`)
+      .subscribe({ next: (d) => this.transactions.set(d) });
+  }
 
   private startConnection() {
     this.hubConnection = new signalR.HubConnectionBuilder()
