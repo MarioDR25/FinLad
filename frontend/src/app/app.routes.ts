@@ -14,7 +14,9 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard) },
-      //{ path: 'transactions', loadComponent: () => import('./features/transactions/transactions.routes').then(m => m.transactionsRoutes) }
+      { path: 'wallets', loadComponent: () => import('./features/wallets/wallets').then(m => m.WalletsPage) },
+      { path: 'analytics', loadComponent: () => import('./features/analytics/analytics').then(m => m.AnalyticsPage) },
+      { path: 'transactions', loadComponent: () => import('./features/transactions/transactions').then(m => m.TransactionsPage) },
     ],
   },
   { path: '**', redirectTo: 'dashboard' },
