@@ -74,6 +74,8 @@ public class TransactionService(AppDbContext context)
         if ((type == TransactionType.Expense || type == TransactionType.Transfer) && wallet.Balance < parsed.Amount)
             throw new InvalidOperationException($"Insufficient balance in {wallet.Name}. Available: {wallet.Balance} PLN");
 
+        transaction.Validate();
+
         if (type == TransactionType.Income)
             wallet.Balance += parsed.Amount;
         else if (type == TransactionType.Expense)

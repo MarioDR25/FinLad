@@ -71,7 +71,7 @@ public class AiService(HttpClient http, IOptions<AiSettings> aiOptions)
             - "description" is a very brief summary (max 3 words). Never include the payment method or wallet name. Example: "almuerzo", "zapatos hijo", "semestre universidad", "uber"
             - "date" (yyyy-MM-dd). If "today"/"hoy" is mentioned, use the date above. If "ayer"/"yesterday", subtract 1 day. If a specific date is mentioned, use that. If no date at all, set to null
 
-            If the message is not a financial transaction, return:
+            If the message does NOT describe a financial transaction, is gibberish, or missing critical information, return:
             {errorExample}
 
             User message: "{userInput}"

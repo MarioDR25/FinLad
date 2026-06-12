@@ -84,5 +84,5 @@ app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHub<TransactionHub>("/hubs/transactions").RequireCors("AngularPolicy");;
+app.MapHub<TransactionHub>("/hubs/transactions").RequireCors("AngularPolicy");
 app.Run();

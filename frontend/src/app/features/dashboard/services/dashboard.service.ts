@@ -104,13 +104,13 @@ export class DashboardService {
     });
 
     this.hubConnection.onreconnected(() => {
-      console.log('Reconectado, recargando datos...');
+      console.log('Reconnected, reloading data...');
       this.loadAll();
     });
 
     this.hubConnection.start()
-      .then(() => console.log('Conexión iniciada'))
-      .catch(err => console.error('Error al conectar', err));
+      .then(() => console.log('Connection started'))
+      .catch(err => console.error('Error connecting', err));
   }
 
 

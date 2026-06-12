@@ -29,13 +29,10 @@ public class TokenServiceTests
             PasswordHash = "hashed"
         };
 
-        // Act: ejecuta el metodo
         string token = service.GenerateToken(user);
 
-        // Assert: verifica que el token no este vacio
         Assert.False(string.IsNullOrEmpty(token));
 
-        // Lee el token generado para validar claims
         var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
         var jwt = handler.ReadJwtToken(token);
 
@@ -45,5 +42,34 @@ public class TokenServiceTests
             c.Type == ClaimTypes.Email && c.Value == "mario@test.com");
         Assert.Contains(jwt.Claims, c =>
             c.Type == ClaimTypes.NameIdentifier && c.Value == "11111111-1111-1111-1111-111111111111");
+    }
+
+    [Fact]
+    public void GenerateToken_ContainsExpirationClaim()
+    {
+        var jwtSettings = new JwtSettings
+        {
+            Key = "this-is-a-secret-key-for-testing-puroposes!",
+            Issuer = "TestIssuer",
+            Audience = "TestAudience",
+            DurationInMinutes = 30
+        };
+        var options = Options.Create(jwtSettings);
+        var service = new TokenService(options);
+
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Test",
+            Email = "test@test.com",
+            PasswordHash = "hashed"
+        };
+
+        string token = service.GenerateToken(user);
+        var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+        var jwt = handler.ReadJwtToken(token);
+
+        Assert.True(jwt.ValidTo > DateTime.UtcNow);
+        Assert.True(jwt.ValidTo <= DateTime.UtcNow.AddMinutes(31));
     }
 }
