@@ -16,15 +16,15 @@ const MONTH_MAP: Record<string, number> = {
   standalone: true,
   imports: [BaseChartDirective],
   template: `
-    <section class="w-full p-4 md:p-8 rounded-xl border border-[#3c4a42] bg-[#161d19]">
+    <section class="w-full p-4 md:p-8 rounded-xl border bg-white">
       <div class="flex justify-between items-center mb-8">
         <div>
-          <h3 class="text-xl font-semibold text-[#dde4dd]">Income vs Expenses</h3>
-          <p class="text-sm text-[#bbcabf]">Yearly financial performance overview</p>
+          <h3 class="text-xl font-semibold text-black">Income vs Expenses</h3>
+          <p class="text-sm text-black">Yearly financial performance overview</p>
         </div>
         <div class="flex gap-4">
-          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#60a5fa]"></span><span class="text-xs text-[#bbcabf]">Income</span></div>
-          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#EE2711]"></span><span class="text-xs text-[#bbcabf]">Expenses</span></div>
+          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#60a5fa]"></span><span class="text-xs text-black">Income</span></div>
+          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#EE2711]"></span><span class="text-xs text-black">Expenses</span></div>
         </div>
       </div>
       <div class="h-50 md:h-75">
