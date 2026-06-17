@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Sidebar } from './sidebar';
+import { Sidebar } from './navbar';
 import { MobileNav } from './mobile-nav';
 import { RouterOutlet } from "@angular/router";
 
@@ -10,9 +10,9 @@ import { RouterOutlet } from "@angular/router";
   standalone: true,
   imports: [Sidebar, MobileNav, RouterOutlet],
   template: `
-    <div class="flex min-h-screen bg-[#0e1511] text-[#dde4dd]">
-      <app-sidebar />
-      <div class="flex-1 w-full">
+    <div class="min-h-screen text-[#dde4dd] py-4 ">
+      <app-navbar />
+      <div class="flex-1 w-full p-4">
         <router-outlet />
       </div>
     </div>
