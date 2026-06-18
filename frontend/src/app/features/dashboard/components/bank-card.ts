@@ -6,14 +6,14 @@ import { Component } from '@angular/core';
   imports: [],
   template: `
     <!-- MAIN CARD CONTAINER (Proporción exacta 16:9 gracias a w-80 y h-45) -->
-    <div class="relative w-95 h-50 shadow-lg select-none rounded-3xl">
+    <div class="relative w-90 h-50 shadow-lg select-none rounded-xl bg-[#34c1b4]">
       
       <!-- BACKGROUND: SVG con proporciones idénticas al DIV padre -->
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 160" class="absolute inset-0 block w-full h-full">
         <defs>
           <!-- Máscara de recorte nativa con esquinas redondeadas de 20px -->
           <clipPath id="card-radius">
-            <rect width="310" height="160" rx="20" ry="20" />
+            <rect width="310" height="160" rx="8" ry="8" />
           </clipPath>
         </defs>
 
@@ -37,7 +37,8 @@ import { Component } from '@angular/core';
       <div class="relative z-10 w-full h-full p-5 flex flex-col justify-between text-white font-sans">
         
         <!-- Fila Superior -->
-        <div class="flex justify-between items-start">
+        <div class="flex gap-2 items-center">
+          <i class="fa-solid fa-chart-simple text-white text-xl "></i>
           <span class="text-lg font-bold tracking-widest uppercase">FinŁad</span>
         </div>
 
@@ -50,6 +51,7 @@ import { Component } from '@angular/core';
         <!-- Fila Inferior -->
         <div class="flex justify-between items-end">
           <span class="text-xs font-medium tracking-widest uppercase">Mario Ivan Daza</span>
+          <span class="text-sm font-medium tracking-widest uppercase">Visa</span>
         </div>
 
       </div>

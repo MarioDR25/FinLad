@@ -7,7 +7,7 @@ import { FinanceDataService } from '../../../core/services/finance-data.service'
   template: `
     <section class="relative">
       <div class="absolute -inset-0.5  "></div>
-      <div class="relative flex items-center bg-white border border-[#216d69] rounded-full px-6 py-4  focus-within:border-[#4edea3] transition-all">
+      <div class="relative flex items-center bg-white border border-[#216d69] rounded-full px-6 py-2  focus-within:border-[#34c1b4] transition-all">
       
         <input #inputIA type="text" class="w-full bg-transparent border-none outline-none text-base text-black placeholder-[#216d69]"
           placeholder="Describe tu movimiento... (ej: 'gasté 45 zl en comida con mi tarjeta')" />

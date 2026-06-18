@@ -19,15 +19,15 @@ const MONTH_MAP: Record<string, number> = {
     <section class="w-full p-4 md:p-8 rounded-xl border bg-white">
       <div class="flex justify-between items-center mb-8">
         <div>
-          <h3 class="text-xl font-semibold text-black">Income vs Expenses</h3>
-          <p class="text-sm text-black">Yearly financial performance overview</p>
+          <h3 class="text-lg font-semibold text-black">Balance Anlytics</h3>
+          <p class="text-xs text-black">Yearly financial performance overview</p>
         </div>
         <div class="flex gap-4">
-          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#60a5fa]"></span><span class="text-xs text-black">Income</span></div>
-          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#EE2711]"></span><span class="text-xs text-black">Expenses</span></div>
+          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#216d69]"></span><span class="text-xs text-black">Income</span></div>
+          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#e11d48]"></span><span class="text-xs text-black">Expenses</span></div>
         </div>
       </div>
-      <div class="h-50 md:h-75">
+      <div class="h-40 md:h-60">
         <canvas baseChart [type]="type" [data]="dataLine()" [options]="options" class="w-full h-full"></canvas>
       </div>
     </section>
@@ -43,8 +43,8 @@ export class LineChart {
     responsive: true, maintainAspectRatio: false,
     plugins: { legend: { display: false } },
     scales: {
-      x: { grid: { color: '#3c4a42', lineWidth: 0.5 }, ticks: { color: '#bbcabf', font: { size: 10 } } },
-      y: { grid: { color: '#3c4a42', lineWidth: 0.5 }, ticks: { color: '#bbcabf', font: { size: 10 } }, beginAtZero: true },
+      x: { grid: { color: '#3c4a42', lineWidth: 0.1 }, ticks: { color: '#000000', font: { size: 9 } } },
+      y: { grid: { color: '#3c4a42', lineWidth: 0.1 }, ticks: { color: '#000000', font: { size: 9 } }, beginAtZero: true },
     },
     interaction: { intersect: false, mode: 'index' },
   };
@@ -62,8 +62,8 @@ export class LineChart {
     return {
       labels: MONTHS,
       datasets: [
-        { label: 'Income', data: mapToArray(this.incomes()), borderColor: '#60a5fa', backgroundColor: 'rgba(96,165,250,0.1)', fill: true, tension: 0.4, pointBackgroundColor: '#60a5fa', pointRadius: 4, spanGaps: false },
-        { label: 'Expenses', data: mapToArray(this.expenses()), borderColor: '#EE2711', backgroundColor: 'rgba(242,80,71,0.09)', fill: true, tension: 0.4, pointBackgroundColor: '#EE2711', pointRadius: 4, spanGaps: false },
+        { label: 'Expenses', data: mapToArray(this.expenses()), borderColor: '#e11d48', backgroundColor: 'rgba(225, 29, 72, 0.05)', fill: true, tension: 0.4, pointBackgroundColor: '#e11d48', pointRadius: 4, spanGaps: false },
+        { label: 'Income', data: mapToArray(this.incomes()), borderColor: '#216d69', backgroundColor: 'rgba(33, 130, 155, 0.3)', fill: true, tension: 0.4, pointBackgroundColor: '#216d69', pointRadius: 4, spanGaps: false },
       ],
     };
   });

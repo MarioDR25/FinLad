@@ -10,28 +10,34 @@ const COLORS = ['#4edea3', '#adc6ff', '#ffb3af', '#fbbf24', '#a78bfa', '#34d399'
   standalone: true,
   imports: [BaseChartDirective],
   template: `
-    <div class="p-4 md:p-8 rounded-xl  bg-white flex flex-col items-center">
-      <div class="w-full flex justify-between items-center mb-8">
-        <h3 class="text-xl font-semibold text-black">Expenses by Category</h3>
+    <div class="p-4 md:p-4 rounded-xl  bg-white flex flex-col items-center gap-8 border">
+      <div class="w-full flex justify-between items-center ">
+        <h3 class="text-lg font-semibold text-black">Expenses by Category</h3>
       </div>
-      <div class="w-48 h-48 md:w-60 md:h-60 relative flex items-center justify-center">
-        <canvas baseChart [type]="type" [data]="chartData()" [options]="options"></canvas>
-        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span class="text-2xl font-semibold text-black">{{ totalSpent() }}</span>
-          <span class="text-[10px] text-black uppercase tracking-widest">Total Spent</span>
+
+      <div class="flex gap-5 ">
+        <div class="w-35 h-35 md:w-45 md:h-45 relative flex items-center justify-center">
+          <canvas baseChart [type]="type" [data]="chartData()" [options]="options"></canvas>
+          <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <span class="text-2xl font-semibold text-[#216d69]">{{ totalSpent() }}</span>
+            <span class="text-[10px] text-[#216d69] uppercase tracking-widest">Total Spent</span>
+          </div>
+        </div>
+        
+        <div class="w-full  grid grid-cols-3 gap-2">
+          @for (item of data(); track item.category) {
+            <div class="flex flex-col items-center">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="w-2 h-2 rounded-full" [style.background]="getColor($index)"></span>
+                <span class="text-xs font-medium text-black">{{ item.category }}</span>
+              </div>
+              <span class="text-sm text-black">{{ item.percentage }}%</span>
+            </div>
+          }
         </div>
       </div>
-      <div class="w-full mt-8 grid grid-cols-3 gap-4">
-        @for (item of data(); track item.category) {
-          <div class="flex flex-col items-center">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="w-2 h-2 rounded-full" [style.background]="getColor($index)"></span>
-              <span class="text-xs font-medium text-black">{{ item.category }}</span>
-            </div>
-            <span class="text-sm text-black">{{ item.percentage }}%</span>
-          </div>
-        }
-      </div>
+
+      
     </div>
   `,
 })

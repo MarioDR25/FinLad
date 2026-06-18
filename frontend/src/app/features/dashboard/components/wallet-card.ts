@@ -1,24 +1,26 @@
 import { Component, input } from '@angular/core';
 import { WalletData } from '../../../core/models/shared.model';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-wallet-card',
   standalone: true,
+  imports: [CurrencyPipe],
   template: `
-    <div class="p-6 rounded-xl  bg-white ">
-      <div class="flex justify-between items-start mb-6">
-      <div class="w-10 h-10 rounded-lg bg-[#2f3632] flex items-center justify-center text-[#4edea3]">
-        <i [class]="'fa-solid ' + data().icon"></i>
+    <div class="p-3 rounded-xl bg-white border ">
+      <div class="flex justify-between items-start ">
+        <div class="w-8 h-8 rounded-lg border border-zinc-100 flex items-center justify-center text-[#216d69]">
+          <i [class]="'fa-solid ' + data().icon"></i>
+        </div>
+        <p class="text-sm  text-black mb-1">{{ data().name }}</p>
+        
       </div>
-        <span class="text-[10px] font-bold text-black group-hover:text-[#4edea3]/60 transition-colors">{{ data().tag }}</span>
+      <div class="flex justify-center">
+        <p class="text-2xl font-semibold text-black">{{ data().balance | currency:'EUR':'symbol':'1.0-0'}}</p>
       </div>
-      <p class="text-sm font-medium text-black mb-1">{{ data().name }}</p>
-      <p class="text-xl font-semibold text-black">{{ data().balance }} PLN</p>
     </div>
   `,
 })
 export class WalletCard {
   data = input.required<WalletData>();
-  
-  
 }
