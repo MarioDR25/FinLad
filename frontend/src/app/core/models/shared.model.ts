@@ -29,3 +29,10 @@ export interface MonthlyTransactions {
   month:  string;
   amount: number;
 }
+
+export interface TotalData {
+  id: string;
+  name: string;
+  icon: string;
+  balance: number;
+}
