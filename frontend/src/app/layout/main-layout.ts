@@ -10,9 +10,9 @@ import { RouterOutlet } from "@angular/router";
   standalone: true,
   imports: [Sidebar, MobileNav, RouterOutlet],
   template: `
-    <div class="min-h-screen text-[#dde4dd] py-4 ">
+    <div class="min-h-screen text-[#dde4dd] pb-1 px-60 bg-white">
       <app-navbar />
-      <div class="flex-1 w-full p-4">
+      <div class=" w-full py-7 bg-[#f9f9f9] rounded-3xl ">
         <router-outlet />
       </div>
     </div>
