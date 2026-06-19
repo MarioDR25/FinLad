@@ -1,20 +1,17 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { DatePipe, CurrencyPipe } from '@angular/common';
 import { FinanceDataService } from '../../core/services/finance-data.service';
+import { YearSelector } from "../../shared/components/year-selector";
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [DatePipe, CurrencyPipe],
+  imports: [DatePipe, CurrencyPipe, YearSelector],
   template: `
     <div class="flex-1 max-w-360 mx-auto w-full px-6 md:px-10 py-8 pb-24 md:pb-8 flex flex-col gap-8">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl font-semibold text-black">Transactions</h2>
-        <select #yearSelect (change)="onYearChange(yearSelect.value)" class="bg-[#216d69] border border-[#3c4a42] rounded-lg px-4 py-2 text-[#dde4dd] text-sm">
-          @for (y of years; track y) {
-            <option [value]="y" [selected]="y === currentYear">{{ y }}</option>
-          }
-        </select>
+        <app-year-selector (year)="this.svc.loadTransactionsByYear($event)"/>
       </div>
       <div class="rounded-lg border border-zinc-200  overflow-x-auto">
         <table class="w-full text-left">
@@ -52,14 +49,8 @@ import { FinanceDataService } from '../../core/services/finance-data.service';
 export class TransactionsPage implements OnInit {
   readonly svc = inject(FinanceDataService);
 
-  currentYear = new Date().getFullYear();
-  years = Array.from({ length: 3 }, (_, i) => this.currentYear - i);
-
   ngOnInit() {
     this.svc.loadTransactions();
   }
 
-  onYearChange(year: string) {
-    this.svc.loadTransactionsByYear(+year);
-  }
 }
