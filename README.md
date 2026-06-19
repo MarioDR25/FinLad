@@ -104,12 +104,6 @@ User types: "gasté 45 PLN en almuerzo con mi tarjeta de crédito"
 
 ---
 
-## Why Not Just Use Excel?
-
-Most finance apps make you fill out tedious forms: amount, category, wallet, date, description — click, click, click. FinLad replaces all of that with a single text input. Describe what happened in plain language and the AI does the rest.
-
----
-
 ## Architecture
 
 ```
