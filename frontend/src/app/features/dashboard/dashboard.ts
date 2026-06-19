@@ -1,14 +1,14 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { TransactionTable } from './components/transaction-table';
 import { FinanceDataService } from '../../core/services/finance-data.service';
-import { WalletCard } from './components/wallet-card';
-import { LineChart } from './components/line-chart';
-import { DoughnutChart } from './components/doughnut-chart';
+import { WalletCard } from '../../shared/components/wallet-card';
+import { LineChart } from '../../shared/components/line-chart';
+import { DoughnutChart } from '../../shared/components/doughnut-chart';
 import { AiInput } from './components/ai-input';
 import { TransactionToast } from './components/toast';
 import { BankCardComponent } from "./components/bank-card";
 import { CurrencyPipe } from '@angular/common';
-import { TotalData } from '../../core/models/shared.model';
+import { TotalData } from '../../shared/models/shared.model';
 import { TotalCard } from "./components/total-card";
 
 @Component({

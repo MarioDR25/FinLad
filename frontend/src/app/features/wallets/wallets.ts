@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FinanceDataService } from '../../core/services/finance-data.service';
-import { WalletCard } from "../dashboard/components/wallet-card";
+import { WalletCard } from "../../shared/components/wallet-card";
 
 @Component({
   selector: 'app-wallets',

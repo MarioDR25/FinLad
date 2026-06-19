@@ -2,7 +2,7 @@ import * as signalR from '@microsoft/signalr';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { ExpensesCategory, MonthlyTransactions, Transaction, WalletData } from '../models/shared.model';
+import { ExpensesCategory, MonthlyTransactions, Transaction, WalletData } from '../../shared/models/shared.model';
 
 @Injectable({ providedIn: 'root' })
 export class FinanceDataService {
