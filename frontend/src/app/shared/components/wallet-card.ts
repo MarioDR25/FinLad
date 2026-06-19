@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { WalletData } from '../../../core/models/shared.model';
+import { WalletData } from '../models/shared.model';
 import { CurrencyPipe } from '@angular/common';
 
 @Component({

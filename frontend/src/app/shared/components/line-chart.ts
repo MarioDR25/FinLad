@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { MonthlyTransactions } from '../../../core/models/shared.model';
+import { MonthlyTransactions } from '../models/shared.model';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const MONTH_MAP: Record<string, number> = {

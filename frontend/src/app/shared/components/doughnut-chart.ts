@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartType } from 'chart.js';
-import { ExpensesCategory } from '../../../core/models/shared.model';
+import { ExpensesCategory } from '../models/shared.model';
 
 const COLORS = ['#4edea3', '#adc6ff', '#ffb3af', '#fbbf24', '#a78bfa', '#34d399', '#f472b6', '#60a5fa', '#fb923c', '#94a3b8'];
 
