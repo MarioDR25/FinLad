@@ -35,3 +35,5 @@ public record AuthResponseDto(
     string? Token = null,
     string? Name = null
 );
+
+public record GoogleLoginDto(string IdToken);

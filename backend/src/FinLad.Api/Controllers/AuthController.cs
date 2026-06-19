@@ -31,4 +31,15 @@ public class AuthController(UserService userService) : ControllerBase
             return Unauthorized(result);
         return Ok(result);
     }
+
+    [HttpPost("google")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<AuthResponseDto>> GoogleLogin(GoogleLoginDto dto)
+    {
+        var result = await userService.GoogleLoginAsync(dto);
+        if (!result.Success)
+            return BadRequest(result);
+        return Ok(result);
+    }
 }

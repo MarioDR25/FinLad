@@ -53,6 +53,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddHttpClient<UserService>();
 builder.Services.AddScoped<WalletService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<TransactionService>();
