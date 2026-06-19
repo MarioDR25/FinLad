@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-/* bg-[#f7fdfd] */
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -42,8 +42,7 @@ import { AuthService } from '../services/auth.service';
             placeholder="••••••••"
           />
         </div>
-
-        
+  
         @if (hasText()) {
           <div class="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-lg text-center my-2">
             {{ message() }}
@@ -52,7 +51,7 @@ import { AuthService } from '../services/auth.service';
 
         <button
           type="submit"
-          class="w-full bg-[#216d69] text-white font-semibold py-3 rounded-lg hover:bg-[#34d399] active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+          class="w-full bg-[#216d69] text-white font-semibold py-3 rounded-lg hover:bg-[#2b8c87] active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
           [disabled]="loading()"
         >
           {{ loading() ? 'Signing in...' : 'Sign In' }}
@@ -61,11 +60,10 @@ import { AuthService } from '../services/auth.service';
 
       <p class=" text-center py-3 text-xs text-zinc-500 uppercase tracking-wider">or</p>
       
-
       <button
         type="button"
         
-        class="w-full flex items-center justify-center bg-white  font-medium py-3 rounded-lg border border-zinc-400 hover:bg-blue-400 hover:border-zinc-600 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+        class="w-full flex items-center justify-center bg-white  font-medium py-3 rounded-lg border border-zinc-300 hover:bg-blue-100 hover:border-blue-100 active:scale-[0.98] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
         [disabled]="loading()"
       >
        

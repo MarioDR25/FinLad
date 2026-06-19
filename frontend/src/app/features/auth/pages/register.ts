@@ -7,60 +7,62 @@ import { AuthService } from '../services/auth.service';
   selector: 'app-register',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
-  template: `<div class="min-h-screen flex flex-col items-center justify-center bg-[#09090b] px-4">
-    <i class="fa-solid fa-hand-holding-dollar  text-[#10b981] text-5xl mb-2"></i>
-    <h1 class="text-4xl font-bold text-[#10b981] mb-8 tracking-tight">FinŁad</h1>
+  template: `<div class="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+    <div class="px-6 mb-4 flex items-center gap-3  text-[#216d69]">
+        <i class="fa-solid fa-chart-simple text-4xl"></i>
+        <h1 class="text-4xl font-bold">FinŁad</h1>
+    </div>
 
-    <div class="w-full max-w-md bg-[#18181b] border border-zinc-800 rounded-lg p-8">
-      <h2 class="text-2xl font-semibold text-zinc-100 mb-1">Create Account</h2>
-      <p class="text-sm text-zinc-400 mb-6">Enter your details to start managing your wealth.</p>
+    <div class="w-full max-w-md  shadow-2xl rounded-lg p-8">
+      <h2 class="text-2xl font-semibold text-black mb-1">Create Account</h2>
+      <p class="text-sm text-zinc-600 mb-6">Enter your details to start managing your wealth.</p>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-zinc-300 mb-1.5">First Name</label>
+          <label class="block text-sm font-medium text-black/70 mb-1.5">First Name</label>
           <input
             type="text"
             formControlName="firstName"
-            class="w-full bg-[#09090b] border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-600 focus:border-[#4edea3] focus:outline-none transition-colors"
+            class="w-full bg-zinc-100 border rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
             placeholder="John"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-zinc-300 mb-1.5">
-            Last Name <span class="text-zinc-600 font-normal">(optional)</span>
+          <label class="block text-sm font-medium text-black/70 mb-1.5">
+            Last Name <span class="text-zinc-400 font-normal">(optional)</span>
           </label>
           <input
             type="text"
             formControlName="lastName"
-            class="w-full bg-[#09090b] border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-600 focus:border-[#4edea3] focus:outline-none transition-colors"
+            class="w-full bg-zinc-100 border rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
             placeholder="Doe"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-zinc-300 mb-1.5">Email Address</label>
+          <label class="block text-sm font-medium text-black/70 mb-1.5">Email Address</label>
           <input
             type="email"
             formControlName="email"
-            class="w-full bg-[#09090b] border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-600 focus:border-[#4edea3] focus:outline-none transition-colors"
+            class="w-full bg-zinc-100 border rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
             placeholder="name@example.com"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-zinc-300 mb-1.5">Password</label>
+          <label class="block text-sm font-medium text-black/70 mb-1.5">Password</label>
           <input
             type="password"
             formControlName="password"
-            class="w-full bg-[#09090b] border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-600 focus:border-[#4edea3] focus:outline-none transition-colors"
+            class="w-full bg-zinc-100 border rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
             placeholder="••••••••"
           />
         </div>
 
         <button
           type="submit"
-          class="w-full bg-[#10b981] text-[#00422b] font-semibold py-3 rounded-lg hover:bg-[#34d399] active:scale-[0.98] transition-all"
+          class="w-full bg-[#216d69] text-white font-semibold py-3 rounded-lg hover:bg-[#2b8c87] active:scale-[0.98] transition-all cursor-pointer"
           [disabled]="loading"
         >
           {{ loading ? 'Creating account...' : 'Create Account' }}
@@ -69,7 +71,7 @@ import { AuthService } from '../services/auth.service';
 
       <p class="mt-6 text-center text-sm text-zinc-400">
         Already have an account?
-        <a routerLink="/auth/login" class="text-[#4edea3] font-semibold hover:underline">Login here</a>
+        <a routerLink="/auth/login" class="text-[#216d69] font-semibold hover:underline">Login here</a>
       </p>
 
     </div>
