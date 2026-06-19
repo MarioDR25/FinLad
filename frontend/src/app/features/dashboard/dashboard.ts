@@ -38,7 +38,6 @@ import { TotalCard } from "./components/total-card";
 
       <app-ai-input />
       <app-transaction-table class="lg:col-span-6" [data]="svc.transactions()" />  
-      
     </section>
 
 
@@ -74,7 +73,6 @@ export class Dashboard implements OnInit {
     this.svc.loadTransactions();
     this.svc.loadAll();
   }
-
 
   dataTotal : TotalData[] = [ {id: 'totalIncome', name: 'Total Income', icon: 'fa-money-bill-trend-up fa-rotate-180', balance: 12547 },
     {id: 'totalExpenses', name: 'Total Expenses', icon: 'fa-money-bill-trend-up', balance: 98531 }
