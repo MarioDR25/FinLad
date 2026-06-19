@@ -20,10 +20,10 @@ public class WalletService(AppDbContext context)
             UserId = userId,
             Description = type switch
             {
-                WalletType.BankAccount => "Main bank account",
-                WalletType.CreditCard => "Credit card tracking",
-                WalletType.Cash => "Physical cash",
-                WalletType.DigitalWallet => "Digital platforms",
+                WalletType.BankAccount => "Capital deposited in traditional checking, savings, or payroll accounts. It represents funds held under standard banking custody for operational management and transfers.",
+                WalletType.CreditCard => "Tracks the balance and spending associated with commercial credit lines. It monitors outstanding balances and financial obligations with the issuing institution.",
+                WalletType.Cash => "Records physical cash, banknotes, coins, and on-hand capital available immediately for daily liquid use. It actively tracks the flow of paper money managed directly and independently.",
+                WalletType.DigitalWallet => "Funds stored in virtual platforms, fintech accounts, and electronic payment gateways. It centralizes capital allocated for digital transactions and web-based operations.",
                 _ => string.Empty
             },
             Icon = type switch
