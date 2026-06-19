@@ -7,7 +7,6 @@ export interface WalletData {
   balance: number;
 }
 
-
 export interface Transaction {
   id: string;
   amount: number;
