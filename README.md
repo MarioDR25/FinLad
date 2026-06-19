@@ -34,7 +34,7 @@ User types: "gasté 45 PLN en almuerzo con mi tarjeta de crédito"
      │
      ▼
 ┌─────────────┐    ┌──────────────┐    ┌──────────────┐
-│  Angular    │───▶│  .NET API    │───▶│  DeepSeek AI │
+│  Angular    │──▶│  .NET API    │───▶│  DeepSeek AI │
 │  Input UI   │    │  POST /ai    │    │  Parses text │
 └─────────────┘    └──────┬───────┘    └──────┬───────┘
                           │                   │
