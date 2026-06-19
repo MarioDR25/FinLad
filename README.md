@@ -66,6 +66,7 @@ User types: "gasté 45 PLN en almuerzo con mi tarjeta de crédito"
 
 ### Authentication & Security
 - JWT-based registration and login
+- Google Sign-In integration
 - Bearer token authentication on every request
 - Route guards protecting authenticated pages
 
@@ -156,6 +157,7 @@ finlad-app/
 |--------|----------|------|-------------|
 | `POST` | `/api/auth/register` | No | Register new user |
 | `POST` | `/api/auth/login` | No | Login, returns JWT |
+| `POST` | `/api/auth/google` | No | Google Sign-In, returns JWT |
 | `GET` | `/api/wallet` | Yes | Get user wallets |
 | `GET` | `/api/transaction?year=` | Yes | Get transactions (optional year filter) |
 | `POST` | `/api/transaction/ai` | Yes | Parse NL into transaction |
