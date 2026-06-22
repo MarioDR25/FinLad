@@ -34,3 +34,5 @@ public record TransactionDto(
 
 
 public record TransactionByMonthDto( string Month, decimal Amount );
+
+public record TotalDto(string Id, string Name, string Icon, decimal Balance);

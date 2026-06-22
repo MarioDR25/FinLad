@@ -36,6 +36,41 @@ public class TransactionService(AppDbContext context)
             .ToListAsync();
     }
 
+    public async Task<IReadOnlyCollection<TransactionByMonthDto>> GetMonthlyTransactions(Guid userId, TransactionType type, int? year = null)
+    {
+        var targetYear = year ?? DateTime.UtcNow.Year;
+
+        var grouped = await _context.Transactions
+            .Where(t => t.Type == type && t.UserId == userId && t.Date.Year == targetYear)
+            .GroupBy(t => t.Date.Month)
+            .Select(g => new { Month = g.Key, Total = g.Sum(t => t.Amount) })
+            .ToListAsync();
+
+        var monthNames = System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames;
+        return [.. grouped.Select(g => new TransactionByMonthDto(monthNames[g.Month - 1], g.Total))];
+    }
+
+    public async Task<IReadOnlyCollection<TotalDto>> GetTotalsAsync(Guid userId, int? year = null)
+    {
+        var targetYear = year ?? DateTime.UtcNow.Year;
+
+        var totals = await _context.Transactions
+            .Where(t => t.UserId == userId && t.Date.Year == targetYear)
+            .GroupBy(t => t.Type)
+            .Select(g => new { Type = g.Key, Total = g.Sum(t => t.Amount) })
+            .ToListAsync();
+
+        var income = totals.FirstOrDefault(t => t.Type == TransactionType.Income)?.Total ?? 0;
+        var expenses = totals.FirstOrDefault(t => t.Type == TransactionType.Expense)?.Total ?? 0;
+
+        return
+        [
+            new TotalDto("totalIncome", "Total Income", "fa-money-bill-trend-up fa-rotate-180", income),
+            new TotalDto("totalExpenses", "Total Expenses", "fa-money-bill-trend-up", expenses)
+        ];
+    }
+
+
     public async Task<TransactionDto> CreateFromParsedAsync(ParsedTransaction parsed, Guid userId)
     {
         if (string.IsNullOrWhiteSpace(parsed.Category))
@@ -109,41 +144,6 @@ public class TransactionService(AppDbContext context)
         );
     }
 
-    public async Task<IReadOnlyCollection<CategoryExpenseDto>> GetExpensesByCategoryAsync(Guid userId)
-    {
-        var grouped = await _context.Transactions
-            .Where(t => t.Type == TransactionType.Expense && t.UserId == userId)
-            .GroupBy(t => t.Category.Name)
-            .Select(g => new { Category = g.Key, Total = g.Sum(t => t.Amount) })
-            .ToListAsync();
-
-        var grandTotal = grouped.Sum(x => x.Total);
-
-        var categories = Enum.GetNames<CategoryType>().Where(c => c != "Salary");
-        return [.. categories.Select(name =>
-        {
-            var match = grouped.FirstOrDefault(g => g.Category == name);
-            var total = match?.Total ?? 0;
-            var percentage = grandTotal > 0 ? Math.Round(total / grandTotal * 100, 1) : 0;
-            return new CategoryExpenseDto(name, total, percentage);
-        })];
-    }
-
-
-    public async Task<IReadOnlyCollection<TransactionByMonthDto>> GetMonthlyTransactions(Guid userId, string transactionType, int? year = null)
-    {
-        var targetYear = year ?? DateTime.UtcNow.Year;
-        var type = Enum.Parse<TransactionType>(transactionType); 
-
-        var grouped = await _context.Transactions
-            .Where(t => t.Type == type && t.UserId == userId && t.Date.Year == targetYear)
-            .GroupBy(t => t.Date.Month)
-            .Select(g => new { Month = g.Key, Total = g.Sum(t => t.Amount) })
-            .ToListAsync();
-
-        var monthNames = System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthNames;
-        return [.. grouped.Select(g => new TransactionByMonthDto(monthNames[g.Month - 1], g.Total))];
-    }
 }
 
 

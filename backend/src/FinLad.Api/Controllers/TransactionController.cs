@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using System.Security.Claims;
+using Finlad.Domain.Enums;
 using FinLad.Api.Hubs;
 using FinLad.Api.Models;
 using FinLad.Api.Services;
@@ -52,22 +53,20 @@ public class TransactionController(AiService aiService, TransactionService trans
         }
     }
 
-
-    [HttpGet("by-category")]
-    public async Task<IActionResult> GetByCategory()
+    [HttpGet("totals")]
+    public async Task<IActionResult> GetTotals([FromQuery] int? year)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var result = await _transactionService.GetExpensesByCategoryAsync(userId);
+        var result = await _transactionService.GetTotalsAsync(userId, year);
         return Ok(result);
     }
 
     [HttpGet("monthly")]
-    public async Task<IActionResult> GetMonthly([FromQuery] string type, [FromQuery] int? year)
+    public async Task<IActionResult> GetMonthly([FromQuery] TransactionType type, [FromQuery] int? year)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var result = await _transactionService.GetMonthlyTransactions(userId, type, year);
         return Ok(result);
     }
-
 
 }
