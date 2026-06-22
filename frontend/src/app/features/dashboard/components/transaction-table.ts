@@ -13,14 +13,14 @@ import { CurrencyPipe } from '@angular/common';
         
       </div>
       
-      <div class="border border-zinc-200 rounded-lg overflow-hidden">
+      <div class="border border-zinc-200 rounded-lg overflow-x-auto">
         <table class="w-full text-left ">
           <thead>
             <tr class="border-b  text-[#216d69] uppercase  bg-[#f7fdfd] text-xs ">
-              <th class="p-2">Description</th>
-              <th class="p-2">Category</th>
-              <th class="p-2 ">Wallet</th>
-              <th class="p-2 text-center">Amount</th>
+              <th class="p-2 whitespace-nowrap">Description</th>
+              <th class="p-2 whitespace-nowrap">Category</th>
+              <th class="p-2 whitespace-nowrap">Wallet</th>
+              <th class="p-2 whitespace-nowrap text-center">Amount</th>
             </tr>
           </thead>
         

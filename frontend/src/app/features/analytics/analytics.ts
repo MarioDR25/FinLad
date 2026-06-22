@@ -9,7 +9,7 @@ import { YearSelector } from "../../shared/components/year-selector";
   standalone: true,
   imports: [DoughnutChart, LineChart, YearSelector],
   template: `
-    <div class="flex-1 max-w-360 mx-auto w-full px-6 md:px-10 py-8 pb-24 md:pb-8 flex flex-col gap-5">
+    <div class="flex-1 max-w-360 mx-auto w-full px-4 md:px-10 py-8 pb-24 md:pb-8 flex flex-col gap-5">
       <div class="flex justify-between items-center">
         <h2 class="text-2xl font-semibold text-black">Analytics</h2>
         <app-year-selector (year)="this.svc.loadMonthlyByYear($event)"/>

@@ -2,13 +2,14 @@ import { Component, computed, input } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartType } from 'chart.js';
 import { ExpensesCategory } from '../models/shared.model';
+import { CurrencyPipe } from '@angular/common';
 
 const COLORS = ['#4edea3', '#adc6ff', '#ffb3af', '#fbbf24', '#a78bfa', '#34d399', '#f472b6', '#60a5fa', '#fb923c', '#94a3b8'];
 
 @Component({
   selector: 'app-doughnut-chart',
   standalone: true,
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, CurrencyPipe],
   template: `
     <div class="p-4 md:p-4 rounded-xl  bg-white flex flex-col items-center gap-8 border">
       <div class="w-full flex justify-between items-center ">
@@ -19,7 +20,7 @@ const COLORS = ['#4edea3', '#adc6ff', '#ffb3af', '#fbbf24', '#a78bfa', '#34d399'
         <div class="w-35 h-35 md:w-45 md:h-45 relative flex items-center justify-center">
           <canvas baseChart [type]="type" [data]="chartData()" [options]="options"></canvas>
           <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span class="text-2xl font-semibold text-[#216d69]">{{ totalSpent() }}</span>
+            <span class="text-2xl font-semibold text-[#216d69]">{{ totalSpent() | currency:'EUR':'symbol':'1.0-0'}}</span>
             <span class="text-[10px] text-[#216d69] uppercase tracking-widest">Total Spent</span>
           </div>
         </div>

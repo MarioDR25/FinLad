@@ -2,7 +2,7 @@ import * as signalR from '@microsoft/signalr';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { ExpensesCategory, MonthlyTransactions, Transaction, WalletData } from '../../shared/models/shared.model';
+import { ExpensesCategory, MonthlyTransactions, TotalData, Transaction, WalletData } from '../../shared/models/shared.model';
 
 @Injectable({ providedIn: 'root' })
 export class FinanceDataService {
@@ -17,6 +17,7 @@ export class FinanceDataService {
   readonly expensesCategory = signal<ExpensesCategory[]>([]);
   readonly monthlyExpenses = signal<MonthlyTransactions[]>([]);
   readonly monthlyIncome = signal<MonthlyTransactions[]>([]);
+  readonly totalData = signal<TotalData[]>([]);
 
   readonly lastCreated = signal<Transaction | null>(null);
   readonly createError = signal<string | null>(null);
@@ -43,11 +44,7 @@ export class FinanceDataService {
         error: (err) => { console.error("Failed to load wallets", err)}
       });
 
-    this.http.get<ExpensesCategory[]>(`${this.urlTransaction}/by-category`)
-      .subscribe({
-        next: (data) => { this.expensesCategory.set(data)},
-        error: (err) => { console.error("Failed to load Expenses by category", err)}
-      });
+    this.loadExpensesByCategory();
 
     this.http.get<MonthlyTransactions[]>(`${this.urlTransaction}/monthly?type=Expense`)
       .subscribe({
@@ -59,6 +56,12 @@ export class FinanceDataService {
       .subscribe({
         next: (data) => { this.monthlyIncome.set(data)},
         error: (err) => { console.error("Failed to load Income", err)}
+      });
+
+    this.http.get<TotalData[]>(`${this.urlTransaction}/totals`)
+      .subscribe({
+        next: (data) => this.totalData.set(data),
+        error: (err) => console.error("Failed to load totals", err)
       });
   }
 
@@ -89,6 +92,16 @@ export class FinanceDataService {
       .subscribe({ next: (d) => this.monthlyExpenses.set(d) });
     this.http.get<MonthlyTransactions[]>(`${this.urlTransaction}/monthly?type=Income&year=${year}`)
       .subscribe({ next: (d) => this.monthlyIncome.set(d) });
+    this.loadExpensesByCategory(year);
+  }
+
+  loadExpensesByCategory(year?: number) {
+    const url = year ? `${this.apiUrl}/Category/expenses?year=${year}` : `${this.apiUrl}/Category/expenses`;
+    this.http.get<ExpensesCategory[]>(url)
+      .subscribe({
+        next: (data) => { this.expensesCategory.set(data)},
+        error: (err) => { console.error("Failed to load Expenses by category", err)}
+      });
   }
 
   

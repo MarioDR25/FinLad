@@ -17,12 +17,12 @@ import { YearSelector } from "../../shared/components/year-selector";
         <table class="w-full text-left">
           <thead>
             <tr class="border-b border-[#3c4a42] text-xs text-[#216d69] bg-[#f7fdfd] uppercase">
-              <th class="p-4 ">Date</th>
-              <th class="p-4 ">Description</th>
-              <th class="p-4 ">Category</th>
-              <th class="p-4 ">Type</th>
-              <th class="p-4 ">Wallet</th>
-              <th class="p-4  text-center">Amount</th>
+              <th class="p-4 whitespace-nowrap">Date</th>
+              <th class="p-4 whitespace-nowrap">Description</th>
+              <th class="p-4 whitespace-nowrap">Category</th>
+              <th class="p-4 whitespace-nowrap">Type</th>
+              <th class="p-4 whitespace-nowrap">Wallet</th>
+              <th class="p-4 whitespace-nowrap text-center">Amount</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-zinc-200">
@@ -34,7 +34,7 @@ import { YearSelector } from "../../shared/components/year-selector";
                 <td class="p-4 text-sm" [class.text-[#4edea3]]="tx.type === 'Income'" [class.text-[#EE2711]]="tx.type === 'Expense'" [class.text-[#60a5fa]]="tx.type === 'Transfer'">{{ tx.type }}</td>
                 <td class="p-4 text-sm ">{{ tx.wallet }}</td>
                 <td class="p-4 " >
-                  <div class="text-center font-mono border rounded"  [class]="tx.type === 'Expense' ? 'text-[#F25544] ' : 'text-[#33afa7] '">
+                  <div class="text-center font-mono lg:border rounded"  [class]="tx.type === 'Expense' ? 'text-[#F25544] ' : 'text-[#33afa7] '">
                     {{ tx.type === 'Income' ? '+' : '-' }}{{ tx.amount | currency:'EUR':'symbol':'1.0-0' }}
                   </div>
                 </td>
