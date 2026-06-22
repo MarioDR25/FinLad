@@ -51,6 +51,14 @@ export class AuthService {
     )
   }
 
+  forgotPassword(email: string): Observable<AuthResponseDto> {
+    return this.http.post<AuthResponseDto>(`${environment.apiUrl}/auth/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<AuthResponseDto> {
+    return this.http.post<AuthResponseDto>(`${environment.apiUrl}/auth/reset-password`, { token, newPassword });
+  }
+
   initGoogleLogin() {
     window.google?.accounts.id.prompt();
   }
