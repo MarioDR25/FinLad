@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -23,7 +23,7 @@ import { AuthService } from '../services/auth.service';
           <input
             type="text"
             formControlName="firstName"
-            class="w-full bg-zinc-100 border rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
+            class="w-full bg-zinc-100 border rounded-lg px-4 py-3  placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
             placeholder="John"
           />
         </div>
@@ -35,7 +35,7 @@ import { AuthService } from '../services/auth.service';
           <input
             type="text"
             formControlName="lastName"
-            class="w-full bg-zinc-100 border rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
+            class="w-full bg-zinc-100 border rounded-lg px-4 py-3  placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
             placeholder="Doe"
           />
         </div>
@@ -45,7 +45,7 @@ import { AuthService } from '../services/auth.service';
           <input
             type="email"
             formControlName="email"
-            class="w-full bg-zinc-100 border rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
+            class="w-full bg-zinc-100 border rounded-lg px-4 py-3  placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
             placeholder="name@example.com"
           />
         </div>
@@ -55,10 +55,16 @@ import { AuthService } from '../services/auth.service';
           <input
             type="password"
             formControlName="password"
-            class="w-full bg-zinc-100 border rounded-lg px-4 py-3 text-zinc-100 placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
+            class="w-full bg-zinc-100 border rounded-lg px-4 py-3  placeholder:text-zinc-400 border-zinc-100 focus:border-[#216d69] focus:outline-none transition-colors"
             placeholder="••••••••"
           />
         </div>
+
+        @if (hasText()) {
+          <div class="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-lg text-center my-2">
+            {{ message() }}
+          </div>
+        }
 
         <button
           type="submit"
@@ -85,6 +91,9 @@ export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  message = signal('');
+  hasText = computed(() => this.message().trim().length > 0);
+
   form: FormGroup = this.fb.nonNullable.group({
     firstName: ['', Validators.required],
     lastName: [''],
@@ -95,13 +104,18 @@ export class RegisterComponent {
   loading = false;
 
   onSubmit(): void {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.message.set('Please fill in all required fields correctly.');
+      return;
+    }
     this.loading = true;
+    this.message.set('');
     this.authService.register(this.form.value).subscribe({
       next: () => {
         this.router.navigate(['/dashboard'], { replaceUrl: true });
       },
-      error: () => {
+      error: (err) => {
+        this.message.set(err.error?.message || 'Registration failed');
         this.loading = false;
       },
     });
