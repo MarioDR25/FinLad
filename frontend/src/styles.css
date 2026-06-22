@@ -2,6 +2,9 @@
 
 @import 'tailwindcss';
 
+@custom-variant card-break (@media (min-width: 1350px));
+@custom-variant mid-break (@media (min-width: 1100px));
+
 html {
     scrollbar-gutter: stable both-edges;
    background-color: black;

@@ -8,13 +8,13 @@ import { AuthService } from '../features/auth/services/auth.service';
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   template: `
-    <aside class="flex w-full sticky  justify-between py-2">
-      <div class="px-6 pb-1 flex items-center gap-3  text-[#216d69]">
+    <aside class="flex w-full sticky top-0 bg-white z-40 justify-between py-2 px-4 md:px-6 border-b border-zinc-100">
+      <div class="flex items-center gap-3 text-[#216d69]">
         <i class="fa-solid fa-chart-simple text-3xl"></i>
-        <h1 class="text-3xl font-bold ">FinŁad</h1>
+        <h1 class="text-2xl md:text-3xl font-bold">FinŁad</h1>
       </div>
-      <nav class="flex ">
-        <a routerLink="/dashboard" routerLinkActive="bg-[#216d69] text-white" class="text-[#216d69]  rounded-lg  flex items-center gap-3 px-6" [routerLinkActiveOptions]="{exact:true}">
+      <nav class="hidden md:flex">
+        <a routerLink="/dashboard" routerLinkActive="bg-[#216d69] text-white" class="text-[#216d69] rounded-lg flex items-center gap-2 md:gap-3 px-3 md:px-6" [routerLinkActiveOptions]="{exact:true}">
           <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
           <span class="text-sm font-bold">Overview</span>
         </a>
@@ -31,16 +31,14 @@ import { AuthService } from '../features/auth/services/auth.service';
           <span class="text-sm font-bold">Wallets</span>
         </a>
       </nav>
-      <div class="px-6 ">
-        <div class="flex items-center gap-3 p-2 text-black">
-          <div >
-            <p class="text-lg font-medium text-[#216d69]">{{ userName }}</p>
-          </div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-user-round-icon lucide-square-user-round"><path d="M18 21a6 6 0 0 0-12 0"/><circle cx="12" cy="11" r="4"/><rect width="18" height="18" x="3" y="3" rx="2"/></svg>
-          <button (click)="onLogout()" type="button" aria-label="Log out">
-            <i class="fa-solid fa-arrow-right-from-bracket text-black text-xl cursor-pointer"></i>
-          </button>
+      <div class="flex items-center gap-2 text-black">
+        <span class="hidden md:block text-sm font-medium text-[#216d69]">{{ userName }}</span>
+        <div class="w-8 h-8 rounded-full bg-[#216d69]/10 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#216d69" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 21a6 6 0 0 0-12 0"/><circle cx="12" cy="11" r="4"/></svg>
         </div>
+        <button (click)="onLogout()" type="button" aria-label="Log out" class="hover:bg-red-50 p-1.5 rounded-lg transition-colors">
+          <i class="fa-solid fa-arrow-right-from-bracket text-zinc-400 hover:text-red-500 text-lg cursor-pointer"></i>
+        </button>
       </div>
     </aside>
   `,
