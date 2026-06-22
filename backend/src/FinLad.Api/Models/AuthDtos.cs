@@ -37,3 +37,16 @@ public record AuthResponseDto(
 );
 
 public record GoogleLoginDto(string IdToken);
+
+public record ForgotPasswordRequest(
+    [Required(ErrorMessage = "Email is required.")]
+    [EmailAddress(ErrorMessage = "Invalid email format.")]
+    string Email
+);
+
+public record ResetPasswordRequest(
+    [Required] string Token,
+    [Required]
+    [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters long.")]
+    string NewPassword
+);

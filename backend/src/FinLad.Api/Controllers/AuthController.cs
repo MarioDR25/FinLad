@@ -42,4 +42,23 @@ public class AuthController(UserService userService) : ControllerBase
             return BadRequest(result);
         return Ok(result);
     }
+
+    [HttpPost("forgot-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<AuthResponseDto>> ForgotPassword(ForgotPasswordRequest request)
+    {
+        var result = await userService.ForgotPasswordAsync(request);
+        return Ok(result);
+    }
+
+    [HttpPost("reset-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<AuthResponseDto>> ResetPassword(ResetPasswordRequest request)
+    {
+        var result = await userService.ResetPasswordAsync(request);
+        if (!result.Success)
+            return BadRequest(result);
+        return Ok(result);
+    }
 }

@@ -35,6 +35,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
 builder.Services.Configure<AiSettings>(builder.Configuration.GetSection(AiSettings.SectionName));
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection(EmailSettings.SectionName));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -56,6 +57,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddHttpClient<UserService>();
 builder.Services.AddScoped<WalletService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<TransactionService>();
 builder.Services.AddScoped<AiService>();
 builder.Services.AddHttpClient<AiService>();
