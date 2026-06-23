@@ -6,11 +6,21 @@ import { FinanceDataService } from '../../../core/services/finance-data.service'
   standalone: true,
   template: `
     @if (visible()) {
-      <div class="fixed top-5 right-10 flex px-8 py-4   transition-all">
-        <i class="fa-solid fa-circle-check text-4xl self-center" [class.text-green-400]="type() === 'Income'" [class.text-red-400]="type() === 'Expense'" [class.text-blue-400]="type() === 'Transfer'"></i>
-        <div class="bg-white rounded text-lg text-black px-8 py-3">
-          {{ type() === 'Income' ? '+' : '-' }}{{ amount() }} PLN — {{ description() }}
-        </div>
+      <div class="fixed top-5 right-5 z-50 flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg transition-all animate-pulse"
+        [class.bg-white]="!isError()"
+        [class.bg-red-50]="isError()"
+        [class.border]="true"
+        [class.border-zinc-200]="!isError()"
+        [class.border-red-200]="isError()">
+        <i class="fa-solid text-xl"
+          [class.fa-circle-check]="!isError()"
+          [class.text-green-500]="!isError() && type() === 'Income'"
+          [class.text-red-400]="!isError() && type() !== 'Income'"
+          [class.fa-circle-exclamation]="isError()"
+          [class.text-red-500]="isError()"></i>
+        <span class="text-sm font-medium" [class.text-black]="!isError()" [class.text-red-600]="isError()">
+          {{ message() }}
+        </span>
       </div>
     }
   `,
@@ -22,19 +32,34 @@ export class TransactionToast {
   amount = signal(0);
   type = signal('');
   description = signal('');
+  isError = signal(false);
+  message = signal('');
   private _timer: any;
 
   constructor() {
     effect(() => {
       const tx = this.svc.lastCreated();
       if (!tx) return;
+      this.isError.set(false);
       this.amount.set(tx.amount);
       this.type.set(tx.type);
       this.description.set(tx.description);
-      this.visible.set(true);
-      clearTimeout(this._timer);
-      this._timer = setTimeout(() => this.visible.set(false), 4000);
+      this.message.set(`${tx.type === 'Income' ? '+' : '-'}${tx.amount.toFixed(2)} PLN — ${tx.description}`);
+      this.show();
+    });
+
+    effect(() => {
+      const err = this.svc.createError();
+      if (!err) return;
+      this.isError.set(true);
+      this.message.set(err);
+      this.show();
     });
   }
-}
 
+  private show() {
+    this.visible.set(true);
+    clearTimeout(this._timer);
+    this._timer = setTimeout(() => this.visible.set(false), 4000);
+  }
+}
