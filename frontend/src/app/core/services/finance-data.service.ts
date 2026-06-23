@@ -114,7 +114,9 @@ export class FinanceDataService {
   private startConnection() {
     const hubUrl = environment.apiUrl.replace('/api', '') + '/hubs/transactions';
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(hubUrl)
+      .withUrl(hubUrl, {
+        transport: signalR.HttpTransportType.ServerSentEvents
+      })
       .withAutomaticReconnect()
       .build();
 
