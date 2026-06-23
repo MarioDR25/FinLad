@@ -14,7 +14,7 @@ import { CurrencyPipe } from '@angular/common';
         </div>
         <p class="text-lg  text-black ">{{ data().name }}</p>
       </div>
-    <p class="text-4xl text-center text-black ">{{ data().balance | currency:'EUR':'symbol':'1.0-0'}}</p>
+    <p class="text-2xl md:text-4xl text-center text-black ">{{ data().balance | currency:'EUR':'symbol':'1.0-0'}}</p>
       
     </div>
   `,

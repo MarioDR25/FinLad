@@ -25,14 +25,14 @@ const COLORS = ['#4edea3', '#adc6ff', '#ffb3af', '#fbbf24', '#a78bfa', '#34d399'
           </div>
         </div>
         
-        <div class="w-full  grid grid-cols-3 gap-2">
+        <div class="w-full grid grid-cols-2 md:grid-cols-3 gap-x-1 gap-y-2">
           @for (item of data(); track item.category) {
             <div class="flex flex-col items-center">
-                <div class="flex items-center gap-2 mb-1">
-                  <span class="w-2 h-2 rounded-full" [style.background]="getColor($index)"></span>
-                <span class="text-xs font-medium text-black">{{ item.category }}</span>
+                <div class="flex items-center gap-1 mb-1">
+                  <span class="w-2 h-2 rounded-full shrink-0" [style.background]="getColor($index)"></span>
+                <span class="text-[11px] md:text-xs font-medium text-black truncate">{{ item.category }}</span>
               </div>
-              <span class="text-sm text-black">{{ item.percentage }}%</span>
+              <span class="text-xs md:text-sm text-black">{{ item.percentage }}%</span>
             </div>
           }
         </div>
