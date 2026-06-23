@@ -32,6 +32,17 @@ Built with a .NET 9 backend and Angular 21 frontend, FinLad supports income, exp
 ## Screenshots
 
 <details>
+<summary>🔐 Authentication</summary>
+<br/>
+<p align="center">
+  <i>Login and registration with JWT, Google Sign-In, and password reset via email</i>
+  <br/><br/>
+  <img src="screenshots/login.png" alt="Login" width="400"/>
+  <img src="screenshots/register.png" alt="Register" width="400"/>
+</p>
+</details>
+
+<details>
 <summary>📱 Dashboard</summary>
 <br/>
 <p align="center">
@@ -71,16 +82,6 @@ Built with a .NET 9 backend and Angular 21 frontend, FinLad supports income, exp
 </p>
 </details>
 
-<details>
-<summary>🔐 Authentication</summary>
-<br/>
-<p align="center">
-  <i>Login and registration with JWT, Google Sign-In, and password reset via email</i>
-  <br/><br/>
-  <img src="screenshots/login.png" alt="Login" width="400"/>
-  <img src="screenshots/register.png" alt="Register" width="400"/>
-</p>
-</details>
 
 ---
 
