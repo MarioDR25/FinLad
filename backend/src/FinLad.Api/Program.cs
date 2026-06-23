@@ -76,7 +76,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AngularPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:4200", "https://finlad-rho.vercel.app")
+        policy.WithOrigins("http://localhost:4200", "https://finlad-rho.vercel.app", "https://finlad.mariodaza.com")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
