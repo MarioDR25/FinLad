@@ -26,7 +26,11 @@ builder.Services.AddControllers()
             return new BadRequestObjectResult(new AuthResponseDto(error, false));
         };
     });
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+    options.ClientTimeoutInterval = TimeSpan.FromSeconds(60);
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -103,5 +107,5 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHub<TransactionHub>("/hubs/transactions").RequireCors("AngularPolicy");
+app.MapHub<TransactionHub>("/hubs/transactions");
 app.Run();
