@@ -6,6 +6,7 @@ using FinLad.Api.Models;
 using FinLad.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.SignalR;
 
 namespace FinLad.Api.Controllers;
@@ -32,6 +33,7 @@ public class TransactionController(AiService aiService, TransactionService trans
 
 
     [HttpPost("ai")]
+    [EnableRateLimiting("ai")]
     public async Task<IActionResult> Parse([FromBody] AiTransactionRequest request)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
